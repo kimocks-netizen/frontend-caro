@@ -1,0 +1,50 @@
+frontend/
+├── public/
+├── src/
+│   ├── assets/                # Images, icons
+│   ├── components/
+│   │   ├── ui/                # Reusable UI components
+│   │   │   ├── Button.jsx
+│   │   │   ├── Card.jsx
+│   │   │   ├── Input.jsx
+│   │   │   └── ...
+│   │   ├── layout/
+│   │   │   ├── Layout.jsx     # Main layout component
+│   │   │   ├── Header.jsx
+│   │   │   └── Footer.jsx
+│   │   ├── products/
+│   │   │   ├── ProductCard.jsx
+│   │   │   └── ProductGrid.jsx
+│   │   └── quotes/
+│   │       ├── QuoteForm.jsx
+│   │       ├── QuoteCart.jsx
+│   │       └── QuoteStatus.jsx
+│   ├── constants/
+│   │   └── styles.js          # Design system constants
+│   ├── context/
+│   │   ├── CartContext.jsx    # Quote cart context
+│   │   └── ThemeContext.jsx   # Dark/light mode
+│   ├── hooks/
+│   │   ├── useCart.js         # Cart management hook
+│   │   └── useApi.js          # API calls hook
+│   ├── pages/
+│   │   ├── Home.jsx
+│   │   ├── Products.jsx
+│   │   ├── Quote/
+│   │   │   ├── Request.jsx
+│   │   │   ├── Track.jsx
+│   │   │   └── Success.jsx
+│   │   ├── Admin/
+│   │   │   ├── Login.jsx
+│   │   │   ├── Dashboard.jsx
+│   │   │   ├── Products.jsx
+│   │   │   └── Quotes.jsx
+│   │   └── 404.jsx
+│   ├── services/
+│   │   ├── api.js            # API service
+│   │   └── supabase.js       # Supabase client
+│   ├── App.jsx
+│   ├── main.jsx
+│   └── routes.jsx
+├── tailwind.config.js
+└── package.json
