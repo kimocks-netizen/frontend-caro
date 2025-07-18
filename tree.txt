@@ -4,47 +4,48 @@ frontend/
 │   ├── assets/                # Images, icons
 │   ├── components/
 │   │   ├── ui/                # Reusable UI components
-│   │   │   ├── Button.jsx
-│   │   │   ├── Card.jsx
-│   │   │   ├── Input.jsx
+│   │   │   ├── Button.tsx
+│   │   │   ├── Card.tsx
+│   │   │   ├── Input.tsx
 │   │   │   └── ...
 │   │   ├── layout/
-│   │   │   ├── Layout.jsx     # Main layout component
-│   │   │   ├── Header.jsx
-│   │   │   └── Footer.jsx
+│   │   │   ├── Layout.tsx     # Main layout component
+│   │   │   ├── Header.tsx
+│   │   │   └── Footer.tsx
 │   │   ├── products/
-│   │   │   ├── ProductCard.jsx
-│   │   │   └── ProductGrid.jsx
+│   │   │   ├── ProductCard.tsx
+│   │   │   └── ProductGrid.tsx
 │   │   └── quotes/
-│   │       ├── QuoteForm.jsx
-│   │       ├── QuoteCart.jsx
-│   │       └── QuoteStatus.jsx
+│   │       ├── QuoteForm.tsx
+│   │       ├── QuoteCart.tsx
+│   │       └── QuoteStatus.tsx
 │   ├── constants/
 │   │   └── styles.js          # Design system constants
 │   ├── context/
-│   │   ├── CartContext.jsx    # Quote cart context
-│   │   └── ThemeContext.jsx   # Dark/light mode
+│   │   ├── CartContext.tsx    # Quote cart context
+│   │   └── ThemeContext.tsx   # Dark/light mode
+│   │   └── useTheme.ts
 │   ├── hooks/
-│   │   ├── useCart.js         # Cart management hook
-│   │   └── useApi.js          # API calls hook
+│   │   ├── useCart.ts         # Cart management hook
+│   │   └── useApi.ts          # API calls hook
 │   ├── pages/
-│   │   ├── Home.jsx
-│   │   ├── Products.jsx
+│   │   ├── Home.tsx
+│   │   ├── Products.tsx
 │   │   ├── Quote/
-│   │   │   ├── Request.jsx
-│   │   │   ├── Track.jsx
-│   │   │   └── Success.jsx
+│   │   │   ├── Request.tsx
+│   │   │   ├── Track.tsx
+│   │   │   └── Success.tsx
 │   │   ├── Admin/
-│   │   │   ├── Login.jsx
-│   │   │   ├── Dashboard.jsx
-│   │   │   ├── Products.jsx
-│   │   │   └── Quotes.jsx
-│   │   └── 404.jsx
+│   │   │   ├── Login.tsx
+│   │   │   ├── Dashboard.tsx
+│   │   │   ├── Products.tsx
+│   │   │   └── Quotes.tsx
+│   │   └── 404.tsx
 │   ├── services/
 │   │   ├── api.js            # API service
 │   │   └── supabase.js       # Supabase client
-│   ├── App.jsx
-│   ├── main.jsx
-│   └── routes.jsx
+│   ├── App.tsx
+│   ├── main.tsx
+│   └── routes.tsx
 ├── tailwind.config.js
 └── package.json
