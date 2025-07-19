@@ -1,1 +1,9 @@
-Trigger redeploy with temp file
+in productCard error: Object literal may only specify known properties, and 'quantity' does not exist in type 'Omit<CartItem, "quantity">'.ts(2353)
+(property) quantity: number on:   const handleAddToCart = () => {
+    addToCart({
+      ...product,
+      quantity,
+      message: '' // Optional message field
+    });
+    setQuantity(1); // Reset after adding
+  };

@@ -8,11 +8,11 @@ frontend/
 │   │   │   ├── Card.tsx
 │   │   │   ├── Input.tsx
 │   │   │   └── ...
-│   │   ├── layout/
+│   │   ├── layout/ # Done
 │   │   │   ├── Layout.tsx     # Main layout component
 │   │   │   ├── Header.tsx
 │   │   │   └── Footer.tsx
-│   │   ├── products/
+│   │   ├── products/ # Done
 │   │   │   ├── ProductCard.tsx
 │   │   │   └── ProductGrid.tsx
 │   │   └── quotes/
@@ -42,8 +42,8 @@ frontend/
 │   │   │   └── Quotes.tsx
 │   │   └── 404.tsx
 │   ├── services/
-│   │   ├── api.js            # API service
-│   │   └── supabase.js       # Supabase client
+│   │   ├── api.ts            # API service
+│   │   └── supabase.ts      # Supabase client
 │   ├── App.tsx
 │   ├── main.tsx
 │   └── routes.tsx

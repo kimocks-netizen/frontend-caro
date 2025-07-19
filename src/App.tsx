@@ -1,26 +1,20 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import { CartProvider } from './context/CartContext';
-import Layout from './components/layout/Layout';
-import Home from './pages/Home';
-import Products from './pages/Products';
-import NotFound from './pages/404';
+import { AuthProvider } from './context/AuthProvider';
+import AppRoutes from './routes';
 
 const App: React.FC = () => {
   return (
     <ThemeProvider>
-      <CartProvider>
-        <Router>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Home />} />
-              <Route path="products" element={<Products />} />
-              <Route path="*" element={<NotFound />} />
-            </Route>
-          </Routes>
-        </Router>
-      </CartProvider>
+      <AuthProvider>
+        <CartProvider>
+          <Router>
+            <AppRoutes />
+          </Router>
+        </CartProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 };

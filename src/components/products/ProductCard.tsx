@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useCart } from '../../hooks/useCart';
 import Button from '../ui/Button';
 
@@ -16,6 +16,17 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addToCart } = useCart();
+
+  const [quantity, setQuantity] = useState(1);
+
+  const handleAddToCart = () => {
+    addToCart({
+      ...product,
+      //quantity,
+      message: '' // Optional message field
+    });
+    setQuantity(1); // Reset after adding
+  };
 
   return (
     <div className="border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
@@ -35,13 +46,18 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <span className="font-medium text-amber-600">
             {product.price_range || 'Request Quote'}
           </span>
-          <Button 
-            onClick={() => addToCart(product)}
-            variant="primary"
-            size="sm"
-          >
-            Add to Quote
-          </Button>
+          <div className="flex items-center gap-2">
+            <input
+              type="number"
+              min="1"
+              value={quantity}
+              onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+              className="w-16 px-2 py-1 border rounded"
+            />
+            <Button onClick={handleAddToCart} variant="primary" size="sm">
+              Add to Quote
+            </Button>
+          </div>
         </div>
       </div>
     </div>
