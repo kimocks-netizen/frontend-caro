@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import { api } from '../../services/api';
+import { useAuth } from '../../context/useAuth'; 
 
 const AdminLogin: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -11,7 +12,8 @@ const AdminLogin: React.FC = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
+  const { login } = useAuth(); 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,8 +23,10 @@ const AdminLogin: React.FC = () => {
     try {
       const response = await api.auth.login(formData.email, formData.password);
       if (response.success && response.data?.token) {
-        localStorage.setItem('adminToken', response.data.token);
-        navigate('/admin/dashboard');
+        //localStorage.setItem('adminToken', response.data.token);
+         login(response.data.token);
+        //navigate('/admin/dashboard');
+        window.location.href = '/admin/dashboard';
       } else {
         setError(response.message || 'Login failed');
       }

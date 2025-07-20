@@ -22,7 +22,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const handleAddToCart = () => {
     addToCart({
       ...product,
-      //quantity,
+        quantity,
       message: '' // Optional message field
     });
     setQuantity(1); // Reset after adding

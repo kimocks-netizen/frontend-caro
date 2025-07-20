@@ -1,3 +1,4 @@
+//useApi.ts
 import { useState } from 'react';
 
 type ApiMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';

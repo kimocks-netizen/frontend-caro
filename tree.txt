@@ -25,6 +25,9 @@ frontend/
 │   │   ├── CartContext.tsx    # Quote cart context
 │   │   └── ThemeContext.tsx   # Dark/light mode
 │   │   └── useTheme.ts
+│   │   └── auth-context.ts
+│   │   └── AuthProvider.tsx
+│   │   └── useAuth.ts
 │   ├── hooks/
 │   │   ├── useCart.ts         # Cart management hook
 │   │   └── useApi.ts          # API calls hook

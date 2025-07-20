@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-
 interface CartItem {
   id: string;
   title: string;
   image_url?: string[];
-  quantity: number;
+  quantity: number; // Ensure this is in your interface
   message?: string;
 }
 
@@ -23,20 +22,20 @@ export const useCart = () => {
   useEffect(() => {
     localStorage.setItem('quoteCart', JSON.stringify(cartItems));
   }, [cartItems]);
-
-  const addToCart = (product: Omit<CartItem, 'quantity'>) => {
-    setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => item.id === product.id);
-      if (existingItem) {
-        return prevItems.map(item =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
-      return [...prevItems, { ...product, quantity: 1 }];
-    });
-  };
+  
+  const addToCart = (product: Omit<CartItem, 'quantity'> & { quantity: number }) => {
+  setCartItems(prevItems => {
+    const existingItem = prevItems.find(item => item.id === product.id);
+    if (existingItem) {
+      return prevItems.map(item =>
+        item.id === product.id
+          ? { ...item, quantity: item.quantity + product.quantity }
+          : item
+      );
+    }
+    return [...prevItems, product];
+  });
+};
 
   const removeFromCart = (productId: string) => {
     setCartItems(prevItems => prevItems.filter(item => item.id !== productId));

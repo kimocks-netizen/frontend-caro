@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../../services/api';
 import Button from '../../components/ui/Button';
+import { useNavigate } from 'react-router-dom';
 
 const AdminQuotes: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [quotes, setQuotes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchQuotes = async () => {
@@ -15,7 +17,7 @@ const AdminQuotes: React.FC = () => {
         if (response.success) {
           setQuotes(response.data || []);
         } else {
-          setError(response.message || 'Failed to fetch quotes');
+          setError(response.message || 'Failed to fetch quotes or they do not exist');
         }
       } catch (error) {
         setError('An error occurred while fetching quotes');
@@ -27,6 +29,11 @@ const AdminQuotes: React.FC = () => {
 
     fetchQuotes();
   }, []);
+
+  const handleView = (id: string) => {
+    console.log('Navigating to quote:', id);
+    navigate(`/admin/quotes/${id}`);
+  };
 
   const updateStatus = async (quoteId: string, status: string) => {
     try {
@@ -82,7 +89,13 @@ const AdminQuotes: React.FC = () => {
                   </select>
                 </td>
                 <td className="py-2 px-4 border-b">
-                  <Button variant="outline" size="sm">View</Button>
+                  <Button 
+                    onClick={() => handleView(quote.id)} 
+                    variant="outline" 
+                    size="sm"
+                  >
+                    View
+                  </Button>
                 </td>
               </tr>
             ))}

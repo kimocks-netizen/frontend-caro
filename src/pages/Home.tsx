@@ -1,11 +1,21 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { useTheme } from '../context/ThemeContext';
 import Button from '../components/ui/Button';
+import { useAuth } from '../context/useAuth';
 import { useNavigate } from 'react-router-dom';
+import QuoteStatus from '../components/quotes/QuoteStatus';
+
 
 const Home: React.FC = () => {
   const { isDarkMode } = useTheme();
+   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  
+   useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/admin/dashboard');
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <div className={`py-12 px-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
@@ -19,6 +29,7 @@ const Home: React.FC = () => {
             Request quotes for high-quality auto parts and get the best deals delivered to your inbox
           </p>
           <div className="flex justify-center space-x-4">
+            
             <Button 
               onClick={() => navigate('/products')}
               variant="primary"
@@ -34,6 +45,9 @@ const Home: React.FC = () => {
               Request Quote
             </Button>
           </div>
+            <div className="w-full max-w-3xl mx-auto mt-8 px-4">
+              <QuoteStatus />
+            </div>
         </div>
 
         {/* Features Section */}
