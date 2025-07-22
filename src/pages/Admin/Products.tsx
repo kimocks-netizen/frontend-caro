@@ -6,12 +6,33 @@ import Input from '../../components/ui/Input';
 import Select from '../../components/ui/Select';
 import FileInput from '../../components/ui/FileInput';
 import { uploadProductImages, deleteProductImage } from '../../services/supabase';
+//import { supabase, uploadProductImages, deleteProductImage } from '../../services/supabase';
 
 type Product = {
   id: string;
   title: string;
   description: string;
-  image_url: string[];
+ image_url: (string | File)[]; // Allow both strings (URLs) and Files (temporary)
+  category: string;
+  available: boolean;
+  price_range?: string;
+};
+// In your API types file (or at the top of your component)
+type APIProduct = {
+  id: string;
+  title: string;
+  description: string;
+  image_url: string[]; // Only strings for the API
+  category: string;
+  available: boolean;
+  price_range?: string;
+};
+
+type LocalProduct = {
+  id: string;
+  title: string;
+  description: string;
+  image_url: (string | File)[]; // Allows both for local state
   category: string;
   available: boolean;
   price_range?: string;
@@ -29,9 +50,11 @@ const AdminProducts: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
+  //const [products, setProducts] = useState<Product[]>([]);
+  //const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(0);
+  const [currentProduct, setCurrentProduct] = useState<LocalProduct | null>(null);
+  const [products, setProducts] = useState<APIProduct[]>([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -49,6 +72,18 @@ const AdminProducts: React.FC = () => {
     };
     fetchProducts();
   }, []);
+  
+  useEffect(() => {
+  return () => {
+    // Clean up any object URLs when component unmounts
+    currentProduct?.image_url.forEach(item => {
+      if (item instanceof File) {
+        const objectUrl = URL.createObjectURL(item);
+        URL.revokeObjectURL(objectUrl);
+      }
+    });
+  };
+}, [currentProduct]);
 
   const handleDelete = async (id: string) => {
     try {
@@ -60,7 +95,7 @@ const AdminProducts: React.FC = () => {
       console.error('Delete failed:', error);
     }
   };
-
+// handleSubmit
 const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
   if (!currentProduct) return;
@@ -69,48 +104,41 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoading(true);
     setError('');
 
-    // First create the product without images if it's new
-    let response;
-    if (!currentProduct.id) {
-      response = await api.products.create({
-        ...currentProduct,
-        image_url: [] // Start with empty array for new products
-      });
-    } else {
-      response = await api.products.update(currentProduct.id, currentProduct);
-    }
+    // 1. Upload new files and get their URLs
+    const files = currentProduct.image_url
+      .filter((item): item is File => item instanceof File);
+    
+    const uploadedUrls = files.length > 0
+      ? await uploadProductImages(
+          files as unknown as FileList,
+          currentProduct.id || 'temp',
+          (progress) => setImageUploadProgress(progress)
+        )
+      : [];
 
-    if (response.success && response.data) {
-      const productId = response.data.id;
+    // 2. Combine existing URLs with new ones
+    const existingUrls = currentProduct.image_url
+      .filter((item): item is string => typeof item === 'string');
+    
+    const allImageUrls = [...existingUrls, ...uploadedUrls];
 
-      // Handle image uploads if there are any temporary images
-      if (currentProduct.image_url.some(url => url.startsWith('data:'))) {
-        const files = await Promise.all(
-          currentProduct.image_url
-            .filter(url => url.startsWith('data:'))
-            .map(async (dataUrl) => {
-              const res = await fetch(dataUrl);
-              const blob = await res.blob();
-              return new File([blob], `image-${Date.now()}.jpg`, { type: blob.type });
-            })
-        );
+    // 3. Prepare API payload (using APIProduct type)
+    const apiPayload: Omit<APIProduct, 'id'> = {
+      title: currentProduct.title,
+      description: currentProduct.description,
+      image_url: allImageUrls,
+      category: currentProduct.category,
+      available: currentProduct.available,
+      price_range: currentProduct.price_range,
+    };
 
-        if (files.length > 0) {
-          const uploadedUrls = await uploadProductImages(
-            files as unknown as FileList,
-            productId,
-            (progress) => setImageUploadProgress(progress)
-          );
-          
-          // Update product with permanent URLs
-          await api.products.update(productId, {
-            image_url: uploadedUrls
-          });
-          response.data.image_url = uploadedUrls;
-        }
-      }
+    // 4. Call API
+    const response = currentProduct.id
+      ? await api.products.update(currentProduct.id, apiPayload)
+      : await api.products.create(apiPayload);
 
-      // Update UI state
+    if (response.success) {
+      // Update state with the API response (which has proper string[] for image_url)
       setProducts(prev => 
         currentProduct.id 
           ? prev.map(p => p.id === currentProduct.id ? response.data : p)
@@ -127,50 +155,28 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   }
 };
 
-  const handleImageUpload = async (files: FileList) => {
-    if (!currentProduct || loading) return;
+const handleImageUpload = async (files: FileList) => {
+  if (!currentProduct || loading) return;
 
-    try {
-      setLoading(true);
-      
-      // For new products, store temporary data URLs
-      if (!currentProduct.id) {
-        const imageUrls = await Promise.all(
-          Array.from(files).map(file => {
-            return new Promise<string>((resolve) => {
-              const reader = new FileReader();
-              reader.onload = (e) => resolve(e.target?.result as string);
-              reader.readAsDataURL(file);
-            });
-          })
-        );
-        setCurrentProduct(prev => ({
-          ...prev!,
-          image_url: [...prev!.image_url, ...imageUrls]
-        }));
-        return;
-      }
-
-      // For existing products, upload immediately
-      setImageUploadProgress(0);
-      const uploadedUrls = await uploadProductImages(
-        files, 
-        currentProduct.id,
-        (progress) => setImageUploadProgress(progress)
-      );
-      setCurrentProduct(prev => ({
-        ...prev!,
-        image_url: [...prev!.image_url, ...uploadedUrls]
-      }));
-    } catch (error) {
-      console.error('Image upload failed:', error);
-      setError('Failed to upload images');
-    } finally {
-      setLoading(false);
-      setImageUploadProgress(0);
-    }
-  };
-
+  try {
+    setLoading(true);
+    const filesArray = Array.from(files);
+    
+    // Update state with new files
+    setCurrentProduct(prev => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        image_url: [...prev.image_url, ...filesArray]
+      };
+    });
+  } catch (error) {
+    console.error('Image upload failed:', error);
+    setError('Failed to upload images');
+  } finally {
+    setLoading(false);
+  }
+};
   const handleRemoveImage = async (index: number) => {
     if (!currentProduct || loading) return;
     
@@ -180,9 +186,9 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       setLoading(true);
       
       // Only delete from storage if it's a Supabase URL
-      if (urlToRemove.includes('supabase.co')) {
-        await deleteProductImage(urlToRemove);
-      }
+    if (typeof urlToRemove === 'string' && urlToRemove.includes('supabase.co')) {
+     await deleteProductImage(urlToRemove);
+    }
       
       setCurrentProduct(prev => ({
         ...prev!,
@@ -246,7 +252,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
               <tr key={product.id}>
                 <td className="py-2 px-4 border-b">
                   <div className="flex items-center">
-                    {product.image_url?.[0] && (
+                    {product.image_url[0] && typeof product.image_url[0] === 'string' && (
                       <img 
                         src={product.image_url[0]} 
                         alt={product.title}
@@ -296,23 +302,49 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
             {currentProduct.image_url.length > 0 && (
               <div className="flex flex-wrap gap-2">
-                {currentProduct.image_url.map((url, index) => (
-                  <div key={index} className="relative">
-                    <img 
-                      src={url} 
-                      alt={`Product preview ${index}`}
-                      className="w-20 h-20 object-cover rounded"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveImage(index)}
-                      className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center"
-                      disabled={loading}
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
+                {currentProduct.image_url.map((item, index) => {
+                  // Handle File objects by creating object URLs
+                  if (item instanceof File) {
+                    const objectUrl = URL.createObjectURL(item);
+                    return (
+                      <div key={index} className="relative">
+                        <img 
+                          src={objectUrl}
+                          alt={`Product preview ${index}`}
+                          className="w-20 h-20 object-cover rounded"
+                          onLoad={() => URL.revokeObjectURL(objectUrl)} // Clean up memory
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveImage(index)}
+                          className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center"
+                          disabled={loading}
+                        >
+                          ×
+                        </button>
+                      </div>
+                    );
+                  }
+                  
+                  // Handle string URLs
+                  return (
+                    <div key={index} className="relative">
+                      <img 
+                        src={item}
+                        alt={`Product preview ${index}`}
+                        className="w-20 h-20 object-cover rounded"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveImage(index)}
+                        className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center"
+                        disabled={loading}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             )}
 
