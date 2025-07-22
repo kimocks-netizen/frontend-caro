@@ -17,8 +17,14 @@ const QuoteForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+ // components/quotes/QuoteForm.tsx
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (cartItems.length === 0) {
+      setError('Please add items to your quote first');
+      return;
+    }
+
     setLoading(true);
     setError('');
 
@@ -28,13 +34,13 @@ const QuoteForm: React.FC = () => {
         items: cartItems.map(item => ({
           productId: item.id,
           quantity: item.quantity,
-          message: item.message
+          message: item.message || ''
         }))
       };
 
       const response = await api.quotes.submit(quoteData);
       
-      if (response.success && response.data) {
+      if (response.success && response.data?.trackingCode) {
         clearCart();
         navigate('/quote/success', { 
           state: { trackingCode: response.data.trackingCode } 
@@ -44,7 +50,7 @@ const QuoteForm: React.FC = () => {
       }
     } catch (error) {
       console.error('Quote submission error:', error);
-      setError('An error occurred while submitting your quote');
+      setError(error instanceof Error ? error.message : 'An error occurred while submitting your quote');
     } finally {
       setLoading(false);
     }

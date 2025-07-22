@@ -1,3 +1,4 @@
+// components/products/ProductCard.tsx
 import React, { useState } from 'react';
 import { useCart } from '../../hooks/useCart';
 import Button from '../ui/Button';
@@ -16,16 +17,16 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addToCart } = useCart();
-
   const [quantity, setQuantity] = useState(1);
 
   const handleAddToCart = () => {
     addToCart({
       ...product,
-        quantity,
-      message: '' // Optional message field
+      quantity,
+      message: ''
     });
-    setQuantity(1); // Reset after adding
+    alert(`${quantity} ${product.title} added to quote`);
+    setQuantity(1);
   };
 
   return (
@@ -54,7 +55,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
               className="w-16 px-2 py-1 border rounded"
             />
-            <Button onClick={handleAddToCart} variant="primary" size="sm">
+            <Button 
+              onClick={handleAddToCart} 
+              variant="primary" 
+              size="sm"
+              className="whitespace-nowrap"
+            >
               Add to Quote
             </Button>
           </div>

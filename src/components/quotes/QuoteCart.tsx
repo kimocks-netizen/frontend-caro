@@ -1,3 +1,4 @@
+// components/quotes/QuoteCart.tsx
 import React from 'react';
 import { useCart } from '../../hooks/useCart';
 import { useTheme } from '../../context/ThemeContext';
@@ -31,7 +32,7 @@ const QuoteCart: React.FC = () => {
       <div className="space-y-4">
         {cartItems.map(item => (
           <div 
-            key={item.id} 
+            key={`${item.id}-${item.message || ''}`} 
             className={`p-3 rounded-md flex justify-between items-center ${
               isDarkMode ? 'bg-gray-600' : 'bg-white'
             }`}

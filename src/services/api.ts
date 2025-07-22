@@ -1,10 +1,15 @@
 import type { Quote, QuoteRequestData, QuoteResponse } from "../types/quote";
 const API_BASE_URL = 'https://caro-backend-production.up.railway.app/api';
 
-/*interface LoginData {
-  email: string;
-  password: string;
-}*/
+export type Product = {
+  id: string;
+  title: string;
+  description: string;
+  image_url: string[];
+  category: string;
+  available: boolean;
+  price_range?: string;
+};
 interface ApiResponse<T> {
   success: boolean;
   data?: T;
@@ -99,6 +104,7 @@ export const api = {
       return api.post<LoginResponse>('/auth/login', { email, password });
     },
   },
+  
   // Product endpoints
 // Update the products section in api.ts
 products: {
@@ -124,18 +130,40 @@ products: {
       price_range?: string;
     }>(`/products/${id}`);
   },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  create: (productData: any) => {
-    return api.post<{
-      id: string;
-      title: string;
-      description: string;
-      image_url: string[];
-      category: string;
-      available: boolean;
-      price_range?: string;
-    }>('/products', productData);
+  create: async (productData: Omit<Product, 'id'>) => {
+    const token = localStorage.getItem('adminToken');
+    if (!token) throw new Error('Authentication required');
+
+    // Ensure image_url is properly formatted as an array
+    const payload = {
+      ...productData,
+      image_url: Array.isArray(productData.image_url) 
+        ? productData.image_url 
+        : productData.image_url ? [productData.image_url] : []
+    };
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/products`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to create product');
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Product creation error:', error);
+      throw error;
+    }
   },
+   
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   update: (id: string, productData: any) => {
     return api.put<{
