@@ -30,7 +30,7 @@ const QuoteForm: React.FC = () => {
 
     try {
       const quoteData: QuoteRequestData = {
-        ...formData,
+        ...formData,  // { name, email, message }
         items: cartItems.map(item => ({
           productId: item.id,
           quantity: item.quantity,

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../../context/ThemeContext';
+import { useCart } from '../../context/CartContext';
 import Button from '../ui/Button';
 import { useAuth } from '../../context/useAuth';
 import { useNavigate } from 'react-router-dom';
@@ -7,10 +8,11 @@ import { useNavigate } from 'react-router-dom';
 const Header: React.FC = () => {
   const { isDarkMode, toggleTheme } = useTheme();
   const { isAuthenticated, logout } = useAuth();
+  const { cartCount } = useCart();
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   
-    const [, setStorageChanged] = useState(false);
+  const [, setStorageChanged] = useState(false);
   useEffect(() => {
     const handleStorageChange = () => {
       setStorageChanged(s => !s); // toggle to force re-render
@@ -22,6 +24,10 @@ const Header: React.FC = () => {
   const handleLogout = () => {
     logout();
     navigate('/');
+  };
+
+  const handleCartClick = () => {
+    navigate('/quote');
   };
 
   return (
@@ -55,6 +61,24 @@ const Header: React.FC = () => {
         <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>☰</button>
 
         <div className="flex items-center space-x-4">
+          {/* Cart Icon */}
+          {!isAuthenticated && (
+            <button
+              onClick={handleCartClick}
+              className="relative p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+              title="View Quote Cart"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
+              </svg>
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </button>
+          )}
+          
           <Button onClick={toggleTheme} variant="ghost" size="sm">
             {isDarkMode ? '☀️' : '🌙'}
           </Button>

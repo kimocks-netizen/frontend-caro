@@ -3,6 +3,58 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Modal animations */
+.modal-enter {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.modal-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+.modal-exit {
+  opacity: 1;
+}
+.modal-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 300ms, transform 300ms;
+}
+
+/* Dark mode transitions */
+.dark {
+  transition: background-color 0.3s ease;
+}
+
+/* Cart icon animations */
+.cart-icon {
+  transition: transform 0.2s ease;
+}
+
+.cart-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Product grid responsive design */
+@media (min-width: 640px) {
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
 /* Custom base styles */
 body {
   @apply bg-gray-50 text-gray-900 font-sans antialiased;
