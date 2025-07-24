@@ -10,6 +10,7 @@ import AdminLogin from './pages/Admin/Login';
 import AdminDashboard from './pages/Admin/Dashboard';
 import AdminProducts from './pages/Admin/Products';
 import AdminQuotes from './pages/Admin/Quotes';
+import QuoteDetail from './pages/Admin/QuoteDetail';
 import NotFound from './pages/404';
 import { useAuth } from './context/useAuth';
 
@@ -61,6 +62,14 @@ const AppRoutes: React.FC = () => {
             element={
               <ProtectedRoute>
                 <AdminQuotes />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="quotes/:id" 
+            element={
+              <ProtectedRoute>
+                <QuoteDetail />
               </ProtectedRoute>
             } 
           />

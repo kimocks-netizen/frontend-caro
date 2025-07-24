@@ -48,32 +48,58 @@ const QuoteStatus: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending': return 'bg-blue-100 text-blue-800';
-      case 'quoted': return 'bg-green-100 text-green-800';
-      case 'rejected': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'pending': 
+        return isDarkMode ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800';
+      case 'in_progress': 
+        return isDarkMode ? 'bg-yellow-900 text-yellow-200' : 'bg-yellow-100 text-yellow-800';
+      case 'quoted': 
+        return isDarkMode ? 'bg-green-900 text-green-200' : 'bg-green-100 text-green-800';
+      case 'quote_issued': 
+        return isDarkMode ? 'bg-purple-900 text-purple-200' : 'bg-purple-100 text-purple-800';
+      case 'rejected': 
+        return isDarkMode ? 'bg-red-900 text-red-200' : 'bg-red-100 text-red-800';
+      default: 
+        return isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'pending': return 'Pending';
+      case 'in_progress': return 'In Progress';
+      case 'quoted': return 'Quoted';
+      case 'quote_issued': return 'Quote Issued';
+      case 'rejected': return 'Rejected';
+      default: return status;
     }
   };
 
   return (
-    <div className={`p-6 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-white'}`}>
-      <h2 className="text-2xl font-bold mb-6">Track Your Quote</h2>
+    <div className={`p-4 sm:p-6 rounded-lg shadow-lg ${isDarkMode ? 'bg-gray-700 border border-gray-600' : 'bg-white border border-gray-200'}`}>
+      <h2 className={`text-xl sm:text-2xl font-bold mb-4 sm:mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+        Track Your Quote
+      </h2>
       
       {!quote && (
-        <form onSubmit={handleSubmit} className="mb-6">
-          <div className="flex space-x-2">
+        <form onSubmit={handleSubmit} className="mb-4 sm:mb-6">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
             <input
               type="text"
               value={trackingCode}
               onChange={(e) => setTrackingCode(e.target.value)}
               placeholder="Enter tracking code"
-              className="flex-grow px-4 py-2 border rounded-md"
+              className={`flex-grow px-3 sm:px-4 py-2 sm:py-3 border rounded-md text-sm sm:text-base ${
+                isDarkMode 
+                  ? 'bg-gray-600 border-gray-500 text-white placeholder-gray-400' 
+                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+              } focus:outline-none focus:ring-2 focus:ring-purple-500`}
               required
             />
             <Button 
               type="submit" 
               variant="primary"
               disabled={!trackingCode.trim()}
+              className="whitespace-nowrap"
             >
               Track
             </Button>
@@ -81,42 +107,69 @@ const QuoteStatus: React.FC = () => {
         </form>
       )}
 
-      {loading && <p className="text-center py-4">Loading quote details...</p>}
-      {error && <p className="text-red-500 text-center py-4">{error}</p>}
+      {loading && (
+        <div className="text-center py-4">
+          <div className="inline-flex items-center">
+            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-purple-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>Loading quote details...</span>
+          </div>
+        </div>
+      )}
+      
+      {error && (
+        <div className="text-center py-4">
+          <p className="text-red-500 text-sm sm:text-base">{error}</p>
+        </div>
+      )}
 
       {quote && (
-        <div>
-          <div className="flex justify-between items-center mb-4">
+        <div className="space-y-4 sm:space-y-6">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-4">
             <div>
-              <span className={`text-sm px-3 py-1 rounded-full ${getStatusColor(quote.status)}`}>
-                {quote.status.toUpperCase()}
+              <span className={`inline-block text-xs sm:text-sm px-3 py-1 rounded-full font-medium ${getStatusColor(quote.status)}`}>
+                {getStatusLabel(quote.status)}
               </span>
             </div>
-            <p className="text-sm">Requested on: {new Date(quote.created_at).toLocaleDateString()}</p>
+            <p className={`text-xs sm:text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+              Requested on: {new Date(quote.created_at).toLocaleDateString()}
+            </p>
           </div>
 
-          <div className="mb-6">
-            <h3 className="font-semibold mb-2">Items Requested</h3>
+          <div className="space-y-3">
+            <h3 className={`font-semibold text-sm sm:text-base ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+              Items Requested
+            </h3>
             <ul className="space-y-2">
               {quote.quote_items.map((item) => (
-                <li key={item.id} className="flex justify-between">
-                  <span>{item.product.title} (x{item.quantity})</span>
+                <li key={item.id} className={`flex justify-between text-sm sm:text-base ${
+                  isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                }`}>
+                  <span className="flex-1">{item.product.title}</span>
+                  <span className="ml-2 font-medium">x{item.quantity}</span>
                 </li>
               ))}
             </ul>
           </div>
 
           {quote.admin_notes && (
-            <div className={`p-4 rounded-md mb-6 ${isDarkMode ? 'bg-gray-600' : 'bg-gray-100'}`}>
-              <h3 className="font-semibold mb-2">Admin Notes</h3>
-              <p>{quote.admin_notes}</p>
+            <div className={`p-3 sm:p-4 rounded-md ${isDarkMode ? 'bg-gray-600 border border-gray-500' : 'bg-gray-100 border border-gray-200'}`}>
+              <h3 className={`font-semibold mb-2 text-sm sm:text-base ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                Admin Notes
+              </h3>
+              <p className={`text-sm sm:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                {quote.admin_notes}
+              </p>
             </div>
           )}
 
-          <div className="flex space-x-3">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-2">
             <Button 
               onClick={() => navigate('/products')} 
               variant="secondary"
+              className="flex-1 sm:flex-none"
             >
               Back to Products
             </Button>
@@ -126,6 +179,7 @@ const QuoteStatus: React.FC = () => {
                 setTrackingCode('');
               }}
               variant="ghost"
+              className="flex-1 sm:flex-none"
             >
               Track Another Quote
             </Button>

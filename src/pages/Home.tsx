@@ -18,22 +18,22 @@ const Home: React.FC = () => {
   }, [isAuthenticated, navigate]);
 
   return (
-    <div className={`py-12 px-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+    <div className={`py-8 sm:py-12 px-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
       <div className="max-w-4xl mx-auto text-center">
         {/* Hero Section */}
-        <div className="mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+        <div className="mb-12 sm:mb-16">
+          <h1 className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
             Premium Auto Parts at Competitive Prices
           </h1>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
+          <p className={`text-lg sm:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
             Request quotes for high-quality auto parts and get the best deals delivered to your inbox
           </p>
-          <div className="flex justify-center space-x-4">
-            
+          <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mb-8 sm:mb-12">
             <Button 
               onClick={() => navigate('/products')}
               variant="primary"
               size="lg"
+              className="w-full sm:w-auto"
             >
               Browse Products
             </Button>
@@ -41,42 +41,54 @@ const Home: React.FC = () => {
               onClick={() => navigate('/quote')}
               variant="secondary"
               size="lg"
+              className="w-full sm:w-auto"
             >
               Request Quote
             </Button>
           </div>
-            <div className="w-full max-w-3xl mx-auto mt-8 px-4">
+          
+          {/* Track Your Quote Section - More prominent on mobile */}
+          <div className="w-full max-w-3xl mx-auto">
+            <div className={`p-4 sm:p-6 rounded-lg shadow-lg ${isDarkMode ? 'bg-gray-700 border border-gray-600' : 'bg-white border border-gray-200'}`}>
+              <h2 className={`text-xl sm:text-2xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                Track Your Quote
+              </h2>
+              <p className={`text-sm sm:text-base mb-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                Already submitted a quote? Enter your tracking code to check the status.
+              </p>
               <QuoteStatus />
             </div>
+          </div>
         </div>
 
         {/* Features Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          <div className={`p-6 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
-            <div className="text-4xl mb-4">🚚</div>
-            <h3 className="text-xl font-semibold mb-2">Fast Delivery</h3>
-            <p>Get your parts shipped quickly to your location</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
+          <div className={`p-4 sm:p-6 rounded-lg ${isDarkMode ? 'bg-gray-700 border border-gray-600' : 'bg-gray-50 border border-gray-200'}`}>
+            <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">🚚</div>
+            <h3 className={`text-lg sm:text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Fast Delivery</h3>
+            <p className={`text-sm sm:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Get your parts shipped quickly to your location</p>
           </div>
-          <div className={`p-6 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
-            <div className="text-4xl mb-4">💰</div>
-            <h3 className="text-xl font-semibold mb-2">Best Prices</h3>
-            <p>Competitive pricing with no hidden fees</p>
+          <div className={`p-4 sm:p-6 rounded-lg ${isDarkMode ? 'bg-gray-700 border border-gray-600' : 'bg-gray-50 border border-gray-200'}`}>
+            <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">💰</div>
+            <h3 className={`text-lg sm:text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Best Prices</h3>
+            <p className={`text-sm sm:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Competitive pricing with no hidden fees</p>
           </div>
-          <div className={`p-6 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
-            <div className="text-4xl mb-4">🛠️</div>
-            <h3 className="text-xl font-semibold mb-2">Quality Parts</h3>
-            <p>Premium components from trusted manufacturers</p>
+          <div className={`p-4 sm:p-6 rounded-lg ${isDarkMode ? 'bg-gray-700 border border-gray-600' : 'bg-gray-50 border border-gray-200'}`}>
+            <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">🛠️</div>
+            <h3 className={`text-lg sm:text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Quality Parts</h3>
+            <p className={`text-sm sm:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Premium components from trusted manufacturers</p>
           </div>
         </div>
 
         {/* Call to Action */}
-        <div className={`p-8 rounded-lg ${isDarkMode ? 'bg-purple-900' : 'bg-purple-100'}`}>
-          <h2 className="text-2xl font-bold mb-4">Ready to get started?</h2>
-          <p className="mb-6">Request a quote today and our team will get back to you within 24 hours</p>
+        <div className={`p-6 sm:p-8 rounded-lg ${isDarkMode ? 'bg-purple-900 border border-purple-700' : 'bg-purple-100 border border-purple-200'}`}>
+          <h2 className={`text-xl sm:text-2xl font-bold mb-3 sm:mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Ready to get started?</h2>
+          <p className={`mb-4 sm:mb-6 text-sm sm:text-base ${isDarkMode ? 'text-purple-200' : 'text-gray-700'}`}>Request a quote today and our team will get back to you within 24 hours</p>
           <Button 
             onClick={() => navigate('/quote')}
             variant={isDarkMode ? "secondary" : "primary"}
             size="lg"
+            className="w-full sm:w-auto"
           >
             Get a Quote
           </Button>
