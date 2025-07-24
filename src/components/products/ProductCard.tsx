@@ -1,6 +1,6 @@
 // components/products/ProductCard.tsx
 import React, { useState } from 'react';
-import { useCart } from '../../hooks/useCart';
+import { useCart } from '../../context/CartContext';
 import Button from '../ui/Button';
 
 interface Product {
@@ -19,7 +19,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
 
-  const handleAddToCart = () => {
+  /*const handleAddToCart = () => {
     addToCart({
       ...product,
       quantity,
@@ -27,7 +27,20 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     });
     alert(`${quantity} ${product.title} added to quote`);
     setQuantity(1);
+  };*/
+  const handleAddToCart = () => {
+    console.log('[Cart] Adding to cart:', { ...product, message: '' });
+    // Add the item to cart 'quantity' times since CartContext addToCart adds 1 at a time
+    for (let i = 0; i < quantity; i++) {
+      addToCart({
+        ...product,
+        message: ''
+      });
+    }
+    alert(`${quantity} ${product.title} added to quote`);
+    setQuantity(1);
   };
+
 
   return (
     <div className="border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">

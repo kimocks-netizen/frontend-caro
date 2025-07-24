@@ -1,6 +1,6 @@
 // components/quotes/QuoteCart.tsx
 import React from 'react';
-import { useCart } from '../../hooks/useCart';
+import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
 import Button from '../ui/Button';
 

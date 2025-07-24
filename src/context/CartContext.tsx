@@ -21,19 +21,30 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Load cart from localStorage
   useEffect(() => {
     const savedCart = localStorage.getItem('quoteCart');
+    console.log('[CartContext] Loading from localStorage:', savedCart);
     if (savedCart) {
-      setCartItems(JSON.parse(savedCart));
+      try {
+        setCartItems(JSON.parse(savedCart));
+      } catch (error) {
+        console.error('[CartContext] Error parsing saved cart:', error);
+        localStorage.removeItem('quoteCart');
+      }
     }
+    setIsLoaded(true);
   }, []);
 
-  // Save cart to localStorage
+  // Save cart to localStorage (only after initial load)
   useEffect(() => {
-    localStorage.setItem('quoteCart', JSON.stringify(cartItems));
-  }, [cartItems]);
+    if (isLoaded) {
+      console.log('[CartContext] Saving to localStorage:', cartItems);
+      localStorage.setItem('quoteCart', JSON.stringify(cartItems));
+    }
+  }, [cartItems, isLoaded]);
 
   const addToCart = (product: Omit<CartItem, 'quantity'>) => {
     setCartItems(prevItems => {
