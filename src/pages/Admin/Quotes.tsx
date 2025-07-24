@@ -71,7 +71,7 @@ const AdminQuotes: React.FC = () => {
         return 'bg-gray-100 text-gray-800';
     }
   };
-
+//fixed
   /*const getStatusLabel = (status: string) => {
     switch (status) {
       case 'pending':
