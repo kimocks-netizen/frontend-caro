@@ -72,7 +72,7 @@ const AdminQuotes: React.FC = () => {
     }
   };
 
-  /*const getStatusLabel = (status: string) => {
+  const getStatusLabel = (status: string) => {
     switch (status) {
       case 'pending':
         return 'Pending';
@@ -87,7 +87,7 @@ const AdminQuotes: React.FC = () => {
       default:
         return status;
     }
-  };*/
+  };
 
   if (loading) return <div>Loading quotes...</div>;
   if (error) return <div className="text-red-500">{error}</div>;
