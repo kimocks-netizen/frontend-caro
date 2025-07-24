@@ -12,6 +12,9 @@ const QuoteDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [updatingStatus, setUpdatingStatus] = useState(false);
+  const [updatingPricing, setUpdatingPricing] = useState(false);
+  const [issuingQuote, setIssuingQuote] = useState(false);
+  const [pricingItems, setPricingItems] = useState<any[]>([]);
 
   useEffect(() => {
     if (id) {
@@ -21,15 +24,10 @@ const QuoteDetail: React.FC = () => {
 
   const fetchQuote = async () => {
     try {
-      // Since we don't have a getById endpoint, we'll fetch all quotes and find the one we need
-      const response = await api.quotes.getAll();
+      const response = await api.quotes.getById(id!);
       if (response.success && response.data) {
-        const foundQuote = response.data.find((q: any) => q.id === id);
-        if (foundQuote) {
-          setQuote(foundQuote);
-        } else {
-          setError('Quote not found');
-        }
+        setQuote(response.data);
+        setPricingItems(response.data.quote_items || []);
       } else {
         setError(response.message || 'Failed to fetch quote');
       }
@@ -49,14 +47,81 @@ const QuoteDetail: React.FC = () => {
       const response = await api.quotes.updateStatus(id, status);
       if (response.success) {
         setQuote((prev: any) => ({ ...prev, status }));
+        console.log('Status updated successfully');
       } else {
         console.error('Failed to update status:', response.message);
+        setError(response.message || 'Failed to update status');
       }
     } catch (err) {
       console.error('Failed to update status', err);
+      setError('Failed to update status');
     } finally {
       setUpdatingStatus(false);
     }
+  };
+
+  const updatePricing = async () => {
+    if (!id) return;
+    
+    setUpdatingPricing(true);
+    try {
+      const items = pricingItems.map(item => ({
+        id: item.id,
+        unit_price: parseFloat(item.unit_price) || 0,
+        quantity: item.quantity
+      }));
+
+      const response = await api.quotes.updatePricing(id, items);
+      if (response.success && response.data) {
+        setQuote(response.data);
+        setPricingItems(response.data.quote_items || []);
+        console.log('Pricing updated successfully');
+      } else {
+        console.error('Failed to update pricing:', response.message);
+        setError(response.message || 'Failed to update pricing');
+      }
+    } catch (err) {
+      console.error('Failed to update pricing', err);
+      setError('Failed to update pricing');
+    } finally {
+      setUpdatingPricing(false);
+    }
+  };
+
+  const issueQuote = async () => {
+    if (!id) return;
+    
+    setIssuingQuote(true);
+    try {
+      const items = pricingItems.map(item => ({
+        id: item.id,
+        unit_price: parseFloat(item.unit_price) || 0,
+        quantity: item.quantity
+      }));
+
+      const response = await api.quotes.issueQuote(id, items);
+      if (response.success && response.data) {
+        setQuote(response.data);
+        setPricingItems(response.data.quote_items || []);
+        console.log('Quote issued successfully');
+      } else {
+        console.error('Failed to issue quote:', response.message);
+        setError(response.message || 'Failed to issue quote');
+      }
+    } catch (err) {
+      console.error('Failed to issue quote', err);
+      setError('Failed to issue quote');
+    } finally {
+      setIssuingQuote(false);
+    }
+  };
+
+  const handlePricingChange = (itemId: string, field: string, value: string) => {
+    setPricingItems(prev => prev.map(item => 
+      item.id === itemId 
+        ? { ...item, [field]: value }
+        : item
+    ));
   };
 
   const getStatusColor = (status: string) => {
@@ -85,6 +150,13 @@ const QuoteDetail: React.FC = () => {
       case 'rejected': return 'Rejected';
       default: return status;
     }
+  };
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-ZA', {
+      style: 'currency',
+      currency: 'ZAR'
+    }).format(amount);
   };
 
   if (loading) {
@@ -129,14 +201,24 @@ const QuoteDetail: React.FC = () => {
     );
   }
 
+  const subtotal = pricingItems.reduce((sum, item) => sum + (parseFloat(item.total_price) || 0), 0);
+  const vatAmount = subtotal * 0.15;
+  const total = subtotal + vatAmount;
+
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-6 max-w-6xl mx-auto">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Quote Details</h1>
         <Button onClick={() => navigate('/admin/quotes')} variant="outline">
           Back to Quotes
         </Button>
       </div>
+
+      {error && (
+        <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+          {error}
+        </div>
+      )}
 
       <div className={`rounded-lg shadow-lg ${isDarkMode ? 'bg-gray-800' : 'bg-white'} p-6`}>
         {/* Quote Header */}
@@ -145,13 +227,14 @@ const QuoteDetail: React.FC = () => {
             <h2 className="text-lg font-semibold mb-2">Quote Information</h2>
             <div className="space-y-2">
               <p><span className="font-medium">Tracking Code:</span> <span className="font-mono">{quote.tracking_code}</span></p>
+              <p><span className="font-medium">Quote Number:</span> <span className="font-mono">{quote.quote_number}</span></p>
               <p><span className="font-medium">Status:</span> 
                 <span className={`ml-2 px-2 py-1 rounded-full text-sm ${getStatusColor(quote.status)}`}>
                   {getStatusLabel(quote.status)}
                 </span>
               </p>
               <p><span className="font-medium">Created:</span> {new Date(quote.created_at).toLocaleDateString()}</p>
-              <p><span className="font-medium">Updated:</span> {new Date(quote.updated_at).toLocaleDateString()}</p>
+              <p><span className="font-medium">Valid Until:</span> {new Date(quote.valid_until).toLocaleDateString()}</p>
             </div>
           </div>
           
@@ -184,20 +267,22 @@ const QuoteDetail: React.FC = () => {
           </div>
         </div>
 
-        {/* Quote Items */}
+        {/* Quote Items with Pricing */}
         <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-3">Items Requested</h3>
+          <h3 className="text-lg font-semibold mb-3">Items & Pricing</h3>
           <div className="overflow-x-auto">
             <table className="min-w-full border-collapse">
               <thead>
                 <tr className={`border-b ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}>
                   <th className="text-left py-2 px-4">Product</th>
                   <th className="text-left py-2 px-4">Quantity</th>
+                  <th className="text-left py-2 px-4">Unit Price (ZAR)</th>
+                  <th className="text-left py-2 px-4">Total Price (ZAR)</th>
                   <th className="text-left py-2 px-4">Message</th>
                 </tr>
               </thead>
               <tbody>
-                {quote.quote_items?.map((item: any) => (
+                {pricingItems?.map((item: any) => (
                   <tr key={item.id} className={`border-b ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}>
                     <td className="py-2 px-4">
                       <div>
@@ -206,6 +291,23 @@ const QuoteDetail: React.FC = () => {
                       </div>
                     </td>
                     <td className="py-2 px-4">{item.quantity}</td>
+                    <td className="py-2 px-4">
+                      <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        value={item.unit_price || ''}
+                        onChange={(e) => handlePricingChange(item.id, 'unit_price', e.target.value)}
+                        className={`w-24 px-2 py-1 border rounded text-sm ${
+                          isDarkMode 
+                            ? 'bg-gray-700 border-gray-600 text-white' 
+                            : 'bg-white border-gray-300 text-gray-900'
+                        }`}
+                      />
+                    </td>
+                    <td className="py-2 px-4">
+                      {formatCurrency((parseFloat(item.unit_price) || 0) * item.quantity)}
+                    </td>
                     <td className="py-2 px-4">
                       {item.message ? (
                         <p className="text-sm">{item.message}</p>
@@ -217,6 +319,35 @@ const QuoteDetail: React.FC = () => {
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* Pricing Summary */}
+          <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <div className="flex justify-between items-center">
+              <div className="space-y-1">
+                <p><span className="font-medium">Subtotal:</span> {formatCurrency(subtotal)}</p>
+                <p><span className="font-medium">VAT (15%):</span> {formatCurrency(vatAmount)}</p>
+                <p className="text-lg font-bold">Total: {formatCurrency(total)}</p>
+              </div>
+              <div className="space-x-2">
+                <Button 
+                  onClick={updatePricing}
+                  disabled={updatingPricing}
+                  variant="secondary"
+                  size="sm"
+                >
+                  {updatingPricing ? 'Updating...' : 'Update Pricing'}
+                </Button>
+                <Button 
+                  onClick={issueQuote}
+                  disabled={issuingQuote || quote.status === 'quote_issued'}
+                  variant="primary"
+                  size="sm"
+                >
+                  {issuingQuote ? 'Issuing...' : 'Issue Quote'}
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
 

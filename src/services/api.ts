@@ -192,8 +192,17 @@ products: {
     getAll: () => {
       return api.get<Quote[]>('/quotes');
     },
+    getById: (id: string) => {
+      return api.get<Quote>(`/quotes/admin/${id}`);
+    },
     updateStatus: (id: string, status: string) => {
       return api.put<Quote>(`/quotes/${id}/status`, { status });
+    },
+    updatePricing: (id: string, items: Array<{id: string, unit_price: number, quantity: number}>) => {
+      return api.put<Quote>(`/quotes/${id}/pricing`, { items });
+    },
+    issueQuote: (id: string, items?: Array<{id: string, unit_price: number, quantity: number}>) => {
+      return api.put<Quote>(`/quotes/${id}/issue`, { items });
     }
   },
 };
