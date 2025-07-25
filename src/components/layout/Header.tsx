@@ -86,49 +86,49 @@ const Header: React.FC = () => {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex space-x-6">
-            <a 
-              href="/" 
+            <button 
+              onClick={() => handleNavClick('/')} 
               className={`hover:text-purple-600 transition-colors ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
             >
               Home
-            </a>
+            </button>
             {!isAuthenticated && (
               <>
-                <a 
-                  href="/products" 
+                <button 
+                  onClick={() => handleNavClick('/products')} 
                   className={`hover:text-purple-600 transition-colors ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
                 >
                   Products
-                </a>
-                <a 
-                  href="/quote" 
+                </button>
+                <button 
+                  onClick={() => handleNavClick('/quote')} 
                   className={`hover:text-purple-600 transition-colors ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
                 >
                   Request Quote
-                </a>
-                <a 
-                  href="/admin" 
+                </button>
+                <button 
+                  onClick={() => handleNavClick('/admin')} 
                   className={`hover:text-purple-600 transition-colors ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
                 >
                   Admin
-                </a>
+                </button>
               </>
             )}
 
             {isAuthenticated && (
               <>
-                <a 
-                  href="/admin/products" 
+                <button 
+                  onClick={() => handleNavClick('/admin/products')} 
                   className={`hover:text-purple-600 transition-colors ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
                 >
                   Products
-                </a>
-                <a 
-                  href="/admin/quotes" 
+                </button>
+                <button 
+                  onClick={() => handleNavClick('/admin/quotes')} 
                   className={`hover:text-purple-600 transition-colors ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
                 >
                   Manage Quotes
-                </a>
+                </button>
                 <button 
                   onClick={handleLogout} 
                   className="text-red-500 hover:text-red-700 transition-colors"
@@ -151,9 +151,22 @@ const Header: React.FC = () => {
                 }`}
                 title="View Quote Cart"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
-                </svg>
+  
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-8 h-8 text-gray-700 hover:text-black"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M2.25 3h1.5l1.72 9.59a1.5 1.5 0 001.47 1.16h10.8a1.5 1.5 0 001.47-1.17l1.14-5.28a.75.75 0 00-.73-.9H5.25m13.5 11.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm-9.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
+                />
+              </svg>
+
                 {cartCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
                     {cartCount}

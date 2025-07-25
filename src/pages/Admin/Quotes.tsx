@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { api } from '../../services/api';
 import Button from '../../components/ui/Button';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../../context/ThemeContext';
 
 const AdminQuotes: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -11,6 +12,7 @@ const AdminQuotes: React.FC = () => {
   const [error, setError] = useState('');
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { isDarkMode } = useTheme();
 
   useEffect(() => {
     const fetchQuotes = async () => {
@@ -93,32 +95,78 @@ const AdminQuotes: React.FC = () => {
   if (error) return <div className="text-red-500">{error}</div>;
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Manage Quotes</h1>
+    <div className={`p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
+      <h1 className={`text-2xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+        Manage Quotes
+      </h1>
 
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-          <thead className="bg-gray-50">
+        <table className={`min-w-full border rounded-lg ${
+          isDarkMode 
+            ? 'bg-gray-800 border-gray-700' 
+            : 'bg-white border-gray-200'
+        }`}>
+          <thead className={`${
+            isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
+          }`}>
             <tr>
-              <th className="py-3 px-4 border-b text-left text-sm font-medium text-gray-700">Tracking Code</th>
-              <th className="py-3 px-4 border-b text-left text-sm font-medium text-gray-700">Customer</th>
-              <th className="py-3 px-4 border-b text-left text-sm font-medium text-gray-700">Items</th>
-              <th className="py-3 px-4 border-b text-left text-sm font-medium text-gray-700">Status</th>
-              <th className="py-3 px-4 border-b text-left text-sm font-medium text-gray-700">Created</th>
-              <th className="py-3 px-4 border-b text-left text-sm font-medium text-gray-700">Actions</th>
+              <th className={`py-3 px-4 border-b text-left text-sm font-medium ${
+                isDarkMode ? 'text-gray-300 border-gray-600' : 'text-gray-700 border-gray-200'
+              }`}>
+                Tracking Code
+              </th>
+              <th className={`py-3 px-4 border-b text-left text-sm font-medium ${
+                isDarkMode ? 'text-gray-300 border-gray-600' : 'text-gray-700 border-gray-200'
+              }`}>
+                Customer
+              </th>
+              <th className={`py-3 px-4 border-b text-left text-sm font-medium ${
+                isDarkMode ? 'text-gray-300 border-gray-600' : 'text-gray-700 border-gray-200'
+              }`}>
+                Items
+              </th>
+              <th className={`py-3 px-4 border-b text-left text-sm font-medium ${
+                isDarkMode ? 'text-gray-300 border-gray-600' : 'text-gray-700 border-gray-200'
+              }`}>
+                Status
+              </th>
+              <th className={`py-3 px-4 border-b text-left text-sm font-medium ${
+                isDarkMode ? 'text-gray-300 border-gray-600' : 'text-gray-700 border-gray-200'
+              }`}>
+                Created
+              </th>
+              <th className={`py-3 px-4 border-b text-left text-sm font-medium ${
+                isDarkMode ? 'text-gray-300 border-gray-600' : 'text-gray-700 border-gray-200'
+              }`}>
+                Actions
+              </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
+          <tbody className={`divide-y ${
+            isDarkMode ? 'divide-gray-700' : 'divide-gray-200'
+          }`}>
             {quotes.map(quote => (
-              <tr key={quote.id} className="hover:bg-gray-50">
-                <td className="py-3 px-4">
+              <tr key={quote.id} className={`${
+                isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
+              }`}>
+                <td className={`py-3 px-4 ${
+                  isDarkMode ? 'text-white' : 'text-gray-900'
+                }`}>
                   <span className="font-mono text-sm">{quote.tracking_code}</span>
                 </td>
-                <td className="py-3 px-4">
+                <td className={`py-3 px-4 ${
+                  isDarkMode ? 'text-white' : 'text-gray-900'
+                }`}>
                   <div className="font-medium">{quote.guest_name}</div>
-                  <div className="text-sm text-gray-500">{quote.guest_email}</div>
+                  <div className={`text-sm ${
+                    isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                  }`}>
+                    {quote.guest_email}
+                  </div>
                 </td>
-                <td className="py-3 px-4">
+                <td className={`py-3 px-4 ${
+                  isDarkMode ? 'text-white' : 'text-gray-900'
+                }`}>
                   <span className="text-sm">{quote.quote_items?.length || 0} item(s)</span>
                 </td>
                 <td className="py-3 px-4">
@@ -137,11 +185,19 @@ const AdminQuotes: React.FC = () => {
                     <option value="rejected">Rejected</option>
                   </select>
                   {updatingStatus === quote.id && (
-                    <span className="ml-2 text-xs text-gray-500">Updating...</span>
+                    <span className={`ml-2 text-xs ${
+                      isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                    }`}>
+                      Updating...
+                    </span>
                   )}
                 </td>
-                <td className="py-3 px-4">
-                  <span className="text-sm text-gray-500">
+                <td className={`py-3 px-4 ${
+                  isDarkMode ? 'text-white' : 'text-gray-900'
+                }`}>
+                  <span className={`text-sm ${
+                    isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                  }`}>
                     {new Date(quote.created_at).toLocaleDateString()}
                   </span>
                 </td>
@@ -150,6 +206,7 @@ const AdminQuotes: React.FC = () => {
                     onClick={() => handleView(quote.id)} 
                     variant="outline" 
                     size="sm"
+                    className={isDarkMode ? 'text-white' : ''}
                   >
                     View Details
                   </Button>

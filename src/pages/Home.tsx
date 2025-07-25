@@ -46,19 +46,10 @@ const Home: React.FC = () => {
               Request Quote
             </Button>
           </div>
-          
-          {/* Track Your Quote Section - More prominent on mobile */}
-          <div className="w-full max-w-3xl mx-auto">
-            <div className={`p-4 sm:p-6 rounded-lg shadow-lg ${isDarkMode ? 'bg-gray-700 border border-gray-600' : 'bg-white border border-gray-200'}`}>
-              <h2 className={`text-xl sm:text-2xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                Track Your Quote
-              </h2>
-              <p className={`text-sm sm:text-base mb-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-                Already submitted a quote? Enter your tracking code to check the status.
-              </p>
-              <QuoteStatus />
-            </div>
-          </div>
+        </div>
+        {/* Track Your Quote Section */}
+        <div className={`w-full max-w-3xl mx-auto mb-12 sm:mb-16 ${isDarkMode ? 'bg-gray-700 border border-gray-600' : 'bg-white border border-gray-200'}`}>
+          <QuoteStatus />
         </div>
 
         {/* Features Section */}

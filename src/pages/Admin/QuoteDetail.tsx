@@ -161,14 +161,14 @@ const QuoteDetail: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="p-6">
+      <div className={`p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
         <div className="text-center py-8">
           <div className="inline-flex items-center">
             <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-purple-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            <span>Loading quote details...</span>
+            <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>Loading quote details...</span>
           </div>
         </div>
       </div>
@@ -177,7 +177,7 @@ const QuoteDetail: React.FC = () => {
 
   if (error) {
     return (
-      <div className="p-6">
+      <div className={`p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
         <div className="text-center py-8">
           <p className="text-red-500 mb-4">{error}</p>
           <Button onClick={() => navigate('/admin/quotes')} variant="primary">
@@ -190,9 +190,9 @@ const QuoteDetail: React.FC = () => {
 
   if (!quote) {
     return (
-      <div className="p-6">
+      <div className={`p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
         <div className="text-center py-8">
-          <p className="text-gray-500 mb-4">Quote not found</p>
+          <p className={`mb-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Quote not found</p>
           <Button onClick={() => navigate('/admin/quotes')} variant="primary">
             Back to Quotes
           </Button>
@@ -206,9 +206,11 @@ const QuoteDetail: React.FC = () => {
   const total = subtotal + vatAmount;
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className={`p-6 max-w-6xl mx-auto ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Quote Details</h1>
+        <h1 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+          Quote Details
+        </h1>
         <Button onClick={() => navigate('/admin/quotes')} variant="outline">
           Back to Quotes
         </Button>
@@ -224,8 +226,10 @@ const QuoteDetail: React.FC = () => {
         {/* Quote Header */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div>
-            <h2 className="text-lg font-semibold mb-2">Quote Information</h2>
-            <div className="space-y-2">
+            <h2 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+              Quote Information
+            </h2>
+            <div className={`space-y-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
               <p><span className="font-medium">Tracking Code:</span> <span className="font-mono">{quote.tracking_code}</span></p>
               <p><span className="font-medium">Quote Number:</span> <span className="font-mono">{quote.quote_number}</span></p>
               <p><span className="font-medium">Status:</span> 
@@ -239,8 +243,10 @@ const QuoteDetail: React.FC = () => {
           </div>
           
           <div>
-            <h2 className="text-lg font-semibold mb-2">Customer Information</h2>
-            <div className="space-y-2">
+            <h2 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+              Customer Information
+            </h2>
+            <div className={`space-y-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
               <p><span className="font-medium">Name:</span> {quote.guest_name}</p>
               <p><span className="font-medium">Email:</span> {quote.guest_email}</p>
               {quote.verified && <p><span className="font-medium">Verified:</span> <span className="text-green-600">Yes</span></p>}
@@ -250,7 +256,9 @@ const QuoteDetail: React.FC = () => {
 
         {/* Status Update */}
         <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-3">Update Status</h3>
+          <h3 className={`text-lg font-semibold mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+            Update Status
+          </h3>
           <div className="flex flex-wrap gap-2">
             {['pending', 'in_progress', 'quoted', 'quote_issued', 'rejected'].map((status) => (
               <Button
@@ -269,28 +277,44 @@ const QuoteDetail: React.FC = () => {
 
         {/* Quote Items with Pricing */}
         <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-3">Items & Pricing</h3>
+          <h3 className={`text-lg font-semibold mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+            Items & Pricing
+          </h3>
           <div className="overflow-x-auto">
             <table className="min-w-full border-collapse">
               <thead>
                 <tr className={`border-b ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}>
-                  <th className="text-left py-2 px-4">Product</th>
-                  <th className="text-left py-2 px-4">Quantity</th>
-                  <th className="text-left py-2 px-4">Unit Price (ZAR)</th>
-                  <th className="text-left py-2 px-4">Total Price (ZAR)</th>
-                  <th className="text-left py-2 px-4">Message</th>
+                  <th className={`text-left py-2 px-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>
+                    Product
+                  </th>
+                  <th className={`text-left py-2 px-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>
+                    Quantity
+                  </th>
+                  <th className={`text-left py-2 px-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>
+                    Unit Price (ZAR)
+                  </th>
+                  <th className={`text-left py-2 px-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>
+                    Total Price (ZAR)
+                  </th>
+                  <th className={`text-left py-2 px-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>
+                    Message
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {pricingItems?.map((item: any) => (
                   <tr key={item.id} className={`border-b ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}>
-                    <td className="py-2 px-4">
+                    <td className={`py-2 px-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                       <div>
                         <p className="font-medium">{item.product?.title}</p>
-                        <p className="text-sm text-gray-500">{item.product?.description}</p>
+                        <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                          {item.product?.description}
+                        </p>
                       </div>
                     </td>
-                    <td className="py-2 px-4">{item.quantity}</td>
+                    <td className={`py-2 px-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                      {item.quantity}
+                    </td>
                     <td className="py-2 px-4">
                       <input
                         type="number"
@@ -305,14 +329,16 @@ const QuoteDetail: React.FC = () => {
                         }`}
                       />
                     </td>
-                    <td className="py-2 px-4">
+                    <td className={`py-2 px-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                       {formatCurrency((parseFloat(item.unit_price) || 0) * item.quantity)}
                     </td>
-                    <td className="py-2 px-4">
+                    <td className={`py-2 px-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                       {item.message ? (
                         <p className="text-sm">{item.message}</p>
                       ) : (
-                        <span className="text-gray-400 text-sm">No message</span>
+                        <span className={`text-sm ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                          No message
+                        </span>
                       )}
                     </td>
                   </tr>
@@ -322,9 +348,11 @@ const QuoteDetail: React.FC = () => {
           </div>
 
           {/* Pricing Summary */}
-          <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+          <div className={`mt-4 p-4 rounded-lg ${
+            isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
+          }`}>
             <div className="flex justify-between items-center">
-              <div className="space-y-1">
+              <div className={`space-y-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                 <p><span className="font-medium">Subtotal:</span> {formatCurrency(subtotal)}</p>
                 <p><span className="font-medium">VAT (15%):</span> {formatCurrency(vatAmount)}</p>
                 <p className="text-lg font-bold">Total: {formatCurrency(total)}</p>
@@ -355,15 +383,19 @@ const QuoteDetail: React.FC = () => {
         <div className="space-y-4">
           {quote.notes && (
             <div>
-              <h3 className="text-lg font-semibold mb-2">Customer Notes</h3>
+              <h3 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                Customer Notes
+              </h3>
               <div className={`p-3 rounded-md ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
-                <p>{quote.notes}</p>
+                <p className={isDarkMode ? 'text-gray-300' : 'text-gray-700'}>{quote.notes}</p>
               </div>
             </div>
           )}
 
           <div>
-            <h3 className="text-lg font-semibold mb-2">Admin Notes</h3>
+            <h3 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+              Admin Notes
+            </h3>
             <textarea
               className={`w-full p-3 border rounded-md ${
                 isDarkMode 

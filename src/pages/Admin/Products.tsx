@@ -6,6 +6,7 @@ import Input from '../../components/ui/Input';
 import Select from '../../components/ui/Select';
 import FileInput from '../../components/ui/FileInput';
 import { uploadProductImages, deleteProductImage } from '../../services/supabase';
+import { useTheme } from '../../context/ThemeContext';
 //import { supabase, uploadProductImages, deleteProductImage } from '../../services/supabase';
 
 type Product = {
@@ -46,7 +47,14 @@ const categories = [
   { id: '5', name: 'Equipment' },
 ];
 
+// Helper function to get category name by ID
+const getCategoryName = (categoryId: string): string => {
+  const category = categories.find(cat => cat.id === categoryId);
+  return category ? category.name : categoryId; // Fallback to ID if not found
+};
+
 const AdminProducts: React.FC = () => {
+  const { isDarkMode } = useTheme();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -231,26 +239,54 @@ const handleImageUpload = async (files: FileList) => {
   if (error) return <div className="text-red-500">{error}</div>;
 
   return (
-    <div className="p-6">
+    <div className={`p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Manage Products</h1>
+        <h1 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Manage Products</h1>
         <Button onClick={handleAdd} variant="primary">Add Product</Button>
       </div>
 
       <div className="overflow-x-auto">
-     <table className="min-w-full bg-white">
-          <thead>
+        <table className={`min-w-full border rounded-lg ${
+          isDarkMode 
+            ? 'bg-gray-800 border-gray-700' 
+            : 'bg-white border-gray-200'
+        }`}>
+          <thead className={`${
+            isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
+          }`}>
             <tr>
-              <th className="py-2 px-4 border-b">Product</th>
-              <th className="py-2 px-4 border-b">Category</th>
-              <th className="py-2 px-4 border-b">Price Range</th>
-              <th className="py-2 px-4 border-b">Actions</th>
+              <th className={`py-2 px-4 border-b text-left text-sm font-medium ${
+                isDarkMode ? 'text-gray-300 border-gray-600' : 'text-gray-700 border-gray-200'
+              }`}>
+                Product
+              </th>
+              <th className={`py-2 px-4 border-b text-left text-sm font-medium ${
+                isDarkMode ? 'text-gray-300 border-gray-600' : 'text-gray-700 border-gray-200'
+              }`}>
+                Category
+              </th>
+              <th className={`py-2 px-4 border-b text-left text-sm font-medium ${
+                isDarkMode ? 'text-gray-300 border-gray-600' : 'text-gray-700 border-gray-200'
+              }`}>
+                Price Range
+              </th>
+              <th className={`py-2 px-4 border-b text-left text-sm font-medium ${
+                isDarkMode ? 'text-gray-300 border-gray-600' : 'text-gray-700 border-gray-200'
+              }`}>
+                Actions
+              </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className={`divide-y ${
+            isDarkMode ? 'divide-gray-700' : 'divide-gray-200'
+          }`}>
             {products.map(product => (
-              <tr key={product.id}>
-                <td className="py-2 px-4 border-b">
+              <tr key={product.id} className={`${
+                isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
+              }`}>
+                <td className={`py-2 px-4 border-b ${
+                  isDarkMode ? 'text-white' : 'text-gray-900'
+                }`}>
                   <div className="flex items-center">
                     {product.image_url[0] && typeof product.image_url[0] === 'string' && (
                       <img 
@@ -261,12 +297,24 @@ const handleImageUpload = async (files: FileList) => {
                     )}
                     <div>
                       <div className="font-medium">{product.title}</div>
-                      <div className="text-sm text-gray-500 line-clamp-1">{product.description}</div>
+                      <div className={`text-sm line-clamp-1 ${
+                        isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                      }`}>
+                        {product.description}
+                      </div>
                     </div>
                   </div>
                 </td>
-                <td className="py-2 px-4 border-b">{product.category}</td>
-                <td className="py-2 px-4 border-b">{product.price_range || '-'}</td>
+                <td className={`py-2 px-4 border-b ${
+                  isDarkMode ? 'text-white' : 'text-gray-900'
+                }`}>
+                  {getCategoryName(product.category)}
+                </td>
+                <td className={`py-2 px-4 border-b ${
+                  isDarkMode ? 'text-white' : 'text-gray-900'
+                }`}>
+                  {product.price_range || '-'}
+                </td>
                 <td className="py-2 px-4 border-b">
                   <div className="flex space-x-2">
                     <Button onClick={() => handleEdit(product)} variant="outline" size="sm">Edit</Button>

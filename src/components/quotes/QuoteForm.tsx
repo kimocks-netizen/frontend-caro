@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useCart } from '../../context/CartContext';
 import { api } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../../context/ThemeContext';
 import Input from '../ui/Input';
 import Button from '../ui/Button';
 import type { QuoteRequestData } from '../../types/quote';
@@ -9,6 +10,7 @@ import type { QuoteRequestData } from '../../types/quote';
 const QuoteForm: React.FC = () => {
   const { cartItems, clearCart } = useCart();
   const navigate = useNavigate();
+  const { isDarkMode } = useTheme();
   const [formData, setFormData] = useState<Omit<QuoteRequestData, 'items'>>({
     name: '',
     email: '',
@@ -79,13 +81,22 @@ const QuoteForm: React.FC = () => {
         required
       />
       <div className="mb-4">
-        <label className="block mb-2 text-sm font-medium">Additional Message</label>
+        <label className={`block mb-2 text-sm font-medium ${
+          isDarkMode ? 'text-gray-300' : 'text-gray-700'
+        }`}>
+          Additional Message
+        </label>
         <textarea
           name="message"
           value={formData.message}
           onChange={handleChange}
-          className="w-full px-3 py-2 border rounded-md"
+          className={`w-full px-3 py-2 border rounded-md ${
+            isDarkMode 
+              ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+              : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+          }`}
           rows={4}
+          placeholder="Enter your additional message here..."
         />
       </div>
       
