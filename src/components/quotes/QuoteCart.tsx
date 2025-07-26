@@ -2,16 +2,33 @@
 import React from 'react';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
+import { useNavigate } from 'react-router-dom';
 import Button from '../ui/Button';
 
 const QuoteCart: React.FC = () => {
   const { cartItems, removeFromCart, updateQuantity, clearCart } = useCart();
   const { isDarkMode } = useTheme();
+  const navigate = useNavigate();
 
   if (cartItems.length === 0) {
     return (
-      <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
-        <p>Your quote cart is empty</p>
+      <div className={`p-6 rounded-lg text-center ${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
+        <div className={`text-4xl mb-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-300'}`}>
+          🛒
+        </div>
+        <h3 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+          Your cart is empty
+        </h3>
+        <p className={`mb-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+          Browse our products to add items to your quote request
+        </p>
+        <Button 
+          onClick={() => navigate('/products')}
+          variant="primary"
+          size="md"
+        >
+          Browse Products
+        </Button>
       </div>
     );
   }

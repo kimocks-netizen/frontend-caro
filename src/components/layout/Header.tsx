@@ -79,9 +79,12 @@ const Header: React.FC = () => {
       <header className={`sticky top-0 z-50 ${navBackground} shadow-md border-b`}>
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-2">
-            <h1 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+            <button 
+              onClick={() => handleNavClick('/')}
+              className={`text-xl font-bold hover:text-purple-600 transition-colors ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+            >
               CaroParts
-            </h1>
+            </button>
           </div>
 
           {/* Desktop Nav */}
@@ -105,6 +108,12 @@ const Header: React.FC = () => {
                   className={`hover:text-purple-600 transition-colors ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
                 >
                   Request Quote
+                </button>
+                <button 
+                  onClick={() => handleNavClick('/quote/track')} 
+                  className={`hover:text-purple-600 transition-colors ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
+                >
+                  Track Quotes
                 </button>
                 <button 
                   onClick={() => handleNavClick('/admin')} 
@@ -158,7 +167,11 @@ const Header: React.FC = () => {
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className="w-8 h-8 text-gray-700 hover:text-black"
+                className={`w-8 h-8 ${
+                  isDarkMode 
+                    ? 'text-white hover:text-purple-400' 
+                    : 'text-gray-700 hover:text-black'
+                }`}
               >
                 <path
                   strokeLinecap="round"
@@ -192,7 +205,10 @@ const Header: React.FC = () => {
                   ? 'text-white hover:bg-gray-700' 
                   : 'text-gray-700 hover:bg-gray-100'
               }`}
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsOpen(!isOpen);
+              }}
               aria-label="Toggle menu"
             >
               {isOpen ? (
@@ -215,7 +231,8 @@ const Header: React.FC = () => {
           {/* Backdrop */}
           <div 
             className="fixed inset-0 bg-black/50 z-40" 
-            onClick={() => setIsOpen(false)} 
+            onClick={() => setIsOpen(false)}
+            onTouchStart={() => setIsOpen(false)}
           />
           
           {/* Mobile Nav Content */}
@@ -224,6 +241,23 @@ const Header: React.FC = () => {
             className={`fixed top-16 left-0 right-0 ${mobileNavBackground} border-t shadow-lg z-50 transition-all duration-300`}
           >
             <div className="px-4 py-4 space-y-2">
+              {/* Close button for mobile nav */}
+              <div className="flex justify-end mb-2">
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className={`p-2 rounded-md transition-colors ${
+                    isDarkMode 
+                      ? 'text-white hover:bg-gray-700' 
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                  aria-label="Close menu"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              
               <button
                 onClick={() => handleNavClick('/')}
                 className={`w-full text-left py-3 px-4 rounded-md transition-colors ${
@@ -257,6 +291,16 @@ const Header: React.FC = () => {
                     }`}
                   >
                     Request Quote
+                  </button>
+                  <button
+                    onClick={() => handleNavClick('/quote/track')}
+                    className={`w-full text-left py-3 px-4 rounded-md transition-colors ${
+                      isDarkMode 
+                        ? 'text-white hover:bg-gray-700' 
+                        : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                  >
+                    Track Quotes
                   </button>
                   <button
                     onClick={() => handleNavClick('/admin')}

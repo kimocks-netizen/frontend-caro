@@ -2,20 +2,30 @@ import React,{useEffect} from 'react';
 import { useTheme } from '../context/ThemeContext';
 import Button from '../components/ui/Button';
 import { useAuth } from '../context/useAuth';
+import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import QuoteStatus from '../components/quotes/QuoteStatus';
 
 
 const Home: React.FC = () => {
   const { isDarkMode } = useTheme();
-   const { isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
+  const { cartItems } = useCart();
   const navigate = useNavigate();
   
-   useEffect(() => {
+  useEffect(() => {
     if (isAuthenticated) {
       navigate('/admin/dashboard');
     }
   }, [isAuthenticated, navigate]);
+
+  const handleGetQuoteClick = () => {
+    if (cartItems.length === 0) {
+      navigate('/products');
+    } else {
+      navigate('/quote');
+    }
+  };
 
   return (
     <div className={`py-8 sm:py-12 px-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
@@ -23,10 +33,10 @@ const Home: React.FC = () => {
         {/* Hero Section */}
         <div className="mb-12 sm:mb-16">
           <h1 className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-            Premium Auto Parts at Competitive Prices
+            Premium Equipment and Parts at Competitive Prices
           </h1>
           <p className={`text-lg sm:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-            Request quotes for high-quality auto parts and get the best deals delivered to your inbox
+            Request quotes for high-quality equipment and parts and get the best deals delivered to your inbox
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mb-8 sm:mb-12">
             <Button 
@@ -76,7 +86,7 @@ const Home: React.FC = () => {
           <h2 className={`text-xl sm:text-2xl font-bold mb-3 sm:mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Ready to get started?</h2>
           <p className={`mb-4 sm:mb-6 text-sm sm:text-base ${isDarkMode ? 'text-purple-200' : 'text-gray-700'}`}>Request a quote today and our team will get back to you within 24 hours</p>
           <Button 
-            onClick={() => navigate('/quote')}
+            onClick={handleGetQuoteClick}
             variant={isDarkMode ? "secondary" : "primary"}
             size="lg"
             className="w-full sm:w-auto"

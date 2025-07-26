@@ -142,7 +142,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 min="1"
                 value={quantity}
                 onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                className={`w-16 px-2 py-1 border rounded ${
+                className={`w-14 px-2 py-1 border rounded ${
                   isDarkMode 
                     ? 'bg-gray-700 border-gray-600 text-white' 
                     : 'bg-white border-gray-300 text-gray-900'

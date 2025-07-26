@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTheme } from '../../context/ThemeContext';
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
 type ButtonSize = 'sm' | 'md' | 'lg';
@@ -17,13 +18,19 @@ const Button: React.FC<ButtonProps> = ({
   className = '',
   ...props
 }) => {
+  const { isDarkMode } = useTheme();
+  
   const baseClasses = 'rounded-md font-medium transition-all disabled:opacity-70 focus:outline-none focus:ring-2 focus:ring-offset-2';
   
   const variantClasses = {
     primary: 'bg-purple-600 text-white hover:bg-purple-700 focus:ring-purple-500',
     secondary: 'bg-amber-500 text-gray-900 hover:bg-amber-600 focus:ring-amber-400',
-    outline: 'border border-gray-300 bg-transparent text-gray-700 hover:bg-gray-50 focus:ring-purple-500',
-    ghost: 'bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-purple-500',
+    outline: isDarkMode 
+      ? 'border border-gray-600 bg-transparent text-gray-300 hover:bg-gray-700 hover:text-white focus:ring-purple-500' 
+      : 'border border-gray-300 bg-transparent text-gray-700 hover:bg-gray-50 focus:ring-purple-500',
+    ghost: isDarkMode 
+      ? 'bg-transparent text-gray-300 hover:bg-gray-700 focus:ring-purple-500' 
+      : 'bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-purple-500',
   };
 
   const sizeClasses = {

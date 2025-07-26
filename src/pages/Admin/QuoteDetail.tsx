@@ -398,8 +398,10 @@ const QuoteDetail: React.FC = () => {
                     onClick={() => setShowPDF(true)}
                     variant="outline"
                     size="sm"
+                    className="whitespace-nowrap"
                   >
-                    View Quote
+                    <span className="hidden sm:inline">View Quote</span>
+                    <span className="sm:hidden">View</span>
                   </Button>
                 )}
               </div>

@@ -18,12 +18,65 @@ const QuoteForm: React.FC = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [validationErrors, setValidationErrors] = useState<{
+    name?: string;
+    email?: string;
+  }>({});
 
- // components/quotes/QuoteForm.tsx
+  // Validation functions
+  const validateName = (name: string): string | undefined => {
+    if (!name.trim()) {
+      return 'Name is required';
+    }
+    if (name.trim().length < 2) {
+      return 'Name must be at least 2 characters long';
+    }
+    if (name.trim().length > 50) {
+      return 'Name must be less than 50 characters';
+    }
+    // Check if name contains only letters, spaces, and common punctuation
+    const nameRegex = /^[a-zA-Z\s\-'\.]+$/;
+    if (!nameRegex.test(name.trim())) {
+      return 'Name can only contain letters, spaces, hyphens, apostrophes, and periods';
+    }
+    return undefined;
+  };
+
+  const validateEmail = (email: string): string | undefined => {
+    if (!email.trim()) {
+      return 'Email is required';
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      return 'Please enter a valid email address';
+    }
+    return undefined;
+  };
+
+  const validateForm = (): boolean => {
+    const nameError = validateName(formData.name);
+    const emailError = validateEmail(formData.email);
+    
+    const errors = {
+      name: nameError,
+      email: emailError,
+    };
+    
+    setValidationErrors(errors);
+    
+    return !nameError && !emailError;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (cartItems.length === 0) {
       setError('Please add items to your quote first');
+      return;
+    }
+
+    // Validate form
+    if (!validateForm()) {
       return;
     }
 
@@ -61,6 +114,11 @@ const QuoteForm: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    
+    // Clear validation error when user starts typing
+    if (validationErrors[name as keyof typeof validationErrors]) {
+      setValidationErrors(prev => ({ ...prev, [name]: undefined }));
+    }
   };
 
   return (
@@ -71,6 +129,7 @@ const QuoteForm: React.FC = () => {
         value={formData.name}
         onChange={handleChange}
         required
+        error={validationErrors.name}
       />
       <Input
         label="Email Address"
@@ -79,6 +138,7 @@ const QuoteForm: React.FC = () => {
         value={formData.email}
         onChange={handleChange}
         required
+        error={validationErrors.email}
       />
       <div className="mb-4">
         <label className={`block mb-2 text-sm font-medium ${
