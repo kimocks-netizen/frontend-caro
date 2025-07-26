@@ -1,5 +1,6 @@
 import type { Quote, QuoteRequestData, QuoteResponse } from "../types/quote";
 const API_BASE_URL = 'https://caro-backend-production.up.railway.app/api';
+//const API_BASE_URL = 'http://localhost:3000/api';
 
 export type Product = {
   id: string;
@@ -38,7 +39,8 @@ export const api = {
     }
 
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      headers
+      headers,
+      cache: 'no-cache' // Prevent caching
     });
     return response.json();
   },
@@ -92,12 +94,20 @@ export const api = {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
+    console.log('PUT request to:', `${API_BASE_URL}${endpoint}`, 'with body:', body);
+    console.log('Headers:', headers);
+
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'PUT',
       headers,
       body: JSON.stringify(body),
     });
-    return response.json();
+    
+    console.log('Response status:', response.status);
+    const responseData = await response.json();
+    console.log('Response data:', responseData);
+    
+    return responseData;
   },
    auth: {
     login: (email: string, password: string) => {
@@ -196,6 +206,7 @@ products: {
       return api.get<Quote>(`/quotes/admin/${id}`);
     },
     updateStatus: (id: string, status: string) => {
+      console.log('API: Updating status for quote', id, 'to', status);
       return api.put<Quote>(`/quotes/${id}/status`, { status });
     },
     updatePricing: (id: string, items: Array<{id: string, unit_price: number, quantity: number}>) => {

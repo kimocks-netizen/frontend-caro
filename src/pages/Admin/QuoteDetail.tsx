@@ -3,6 +3,23 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { api } from '../../services/api';
 import Button from '../../components/ui/Button';
 import { useTheme } from '../../context/ThemeContext';
+import QuotePDF from '../../components/quotes/QuotePDF';
+
+// Simple toast component
+const Toast = ({ message, type, onClose }: { message: string; type: 'success' | 'error'; onClose: () => void }) => {
+  useEffect(() => {
+    const timer = setTimeout(onClose, 3000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  return (
+    <div className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
+      type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+    }`}>
+      {message}
+    </div>
+  );
+};
 
 const QuoteDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -14,7 +31,9 @@ const QuoteDetail: React.FC = () => {
   const [updatingStatus, setUpdatingStatus] = useState(false);
   const [updatingPricing, setUpdatingPricing] = useState(false);
   const [issuingQuote, setIssuingQuote] = useState(false);
+  const [showPDF, setShowPDF] = useState(false);
   const [pricingItems, setPricingItems] = useState<any[]>([]);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   useEffect(() => {
     if (id) {
@@ -374,6 +393,15 @@ const QuoteDetail: React.FC = () => {
                 >
                   {issuingQuote ? 'Issuing...' : 'Issue Quote'}
                 </Button>
+                {(quote.status === 'quoted' || quote.status === 'quote_issued') && (
+                  <Button 
+                    onClick={() => setShowPDF(true)}
+                    variant="outline"
+                    size="sm"
+                  >
+                    View Quote
+                  </Button>
+                )}
               </div>
             </div>
           </div>
@@ -411,6 +439,7 @@ const QuoteDetail: React.FC = () => {
                 onClick={() => {
                   // TODO: Implement admin notes update
                   console.log('Update admin notes');
+                  setToast({ message: 'Admin notes updated successfully!', type: 'success' });
                 }}
                 variant="primary"
                 size="sm"
@@ -421,6 +450,23 @@ const QuoteDetail: React.FC = () => {
           </div>
         </div>
       </div>
+      
+      {/* PDF Modal */}
+      {showPDF && quote && (
+        <QuotePDF 
+          quote={quote} 
+          onClose={() => setShowPDF(false)} 
+        />
+      )}
+      
+      {/* Toast */}
+      {toast && (
+        <Toast 
+          message={toast.message} 
+          type={toast.type} 
+          onClose={() => setToast(null)} 
+        />
+      )}
     </div>
   );
 };

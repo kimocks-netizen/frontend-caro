@@ -42,16 +42,20 @@ const AdminQuotes: React.FC = () => {
   const updateStatus = async (quoteId: string, status: string) => {
     setUpdatingStatus(quoteId);
     try {
+      console.log('Updating status for quote:', quoteId, 'to status:', status);
       const response = await api.quotes.updateStatus(quoteId, status);
+      console.log('Update status response:', response);
       if (response.success) {
         setQuotes(prev => prev.map(q => 
           q.id === quoteId ? { ...q, status } : q
         ));
       } else {
         console.error('Failed to update status:', response.message);
+        alert(`Failed to update status: ${response.message}`);
       }
     } catch (err) {
       console.error('Failed to update status', err);
+      alert('Failed to update status. Please try again.');
     } finally {
       setUpdatingStatus(null);
     }

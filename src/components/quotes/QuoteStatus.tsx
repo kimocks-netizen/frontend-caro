@@ -29,6 +29,8 @@ const QuoteStatus: React.FC = () => {
     try {
       const response = await api.quotes.getByTracking(code);
       if (response.success && response.data) {
+        console.log('Quote fetched:', response.data);
+        console.log('Quote status:', response.data.status);
         setQuote(response.data);
       } else {
         setError(response.message || 'Quote not found');
@@ -148,13 +150,19 @@ const QuoteStatus: React.FC = () => {
               </p>
             </div>
 
-            {/* Quote Number */}
+            {/* Quote Number and Status */}
             <div className={`p-3 rounded-md ${isDarkMode ? 'bg-gray-600 border border-gray-500' : 'bg-gray-100 border border-gray-200'}`}>
               <p className={`text-sm sm:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                 <span className="font-semibold">Quote Number:</span> {quote.quote_number}
               </p>
               <p className={`text-sm sm:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                 <span className="font-semibold">Valid Until:</span> {quote.valid_until ? new Date(quote.valid_until).toLocaleDateString() : 'N/A'}
+              </p>
+              <p className={`text-sm sm:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                <span className="font-semibold">Status:</span> 
+                <span className={`ml-2 px-2 py-1 rounded text-xs font-medium ${getStatusColor(quote.status)}`}>
+                  {getStatusLabel(quote.status)}
+                </span>
               </p>
             </div>
 
@@ -177,8 +185,8 @@ const QuoteStatus: React.FC = () => {
               </ul>
             </div>
 
-            {/* Pricing Summary for Issued Quotes */}
-            {quote.status === 'quote_issued' && quote.subtotal && (
+            {/* Pricing Summary for Quoted/Issued Quotes */}
+            {(quote.status === 'quoted' || quote.status === 'quote_issued') && quote.subtotal && (
               <div className={`p-3 sm:p-4 rounded-md ${isDarkMode ? 'bg-gray-600 border border-gray-500' : 'bg-gray-100 border border-gray-200'}`}>
                 <h3 className={`font-semibold mb-2 text-sm sm:text-base ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                   Pricing Summary
@@ -209,7 +217,7 @@ const QuoteStatus: React.FC = () => {
             )}
 
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-2">
-              {quote.status === 'quote_issued' && (
+              {(quote.status === 'quoted' || quote.status === 'quote_issued') && (
                 <Button 
                   onClick={() => setShowPDF(true)}
                   variant="primary"
@@ -218,6 +226,17 @@ const QuoteStatus: React.FC = () => {
                   View Quote PDF
                 </Button>
               )}
+              <Button 
+                onClick={() => fetchQuote(quote.tracking_code)}
+                variant="outline"
+                className={`flex-1 sm:flex-none ${
+                  isDarkMode 
+                    ? 'text-white border-gray-600 hover:bg-gray-700 hover:text-white' 
+                    : 'text-gray-700 border-gray-300 hover:bg-gray-50'
+                }`}
+              >
+                Refresh Quote
+              </Button>
               <Button 
                 onClick={() => navigate('/products')} 
                 variant="secondary"

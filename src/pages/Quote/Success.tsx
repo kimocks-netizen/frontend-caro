@@ -1,7 +1,6 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '../../components/ui/Button';
-import Layout from '../../components/layout/Layout';
 
 const QuoteSuccessPage: React.FC = () => {
   const location = useLocation();
@@ -9,7 +8,6 @@ const QuoteSuccessPage: React.FC = () => {
   const trackingCode = location.state?.trackingCode as string;
 
   return (
-    <Layout>
       <div className="container mx-auto px-4 py-8 text-center max-w-2xl">
         <div className="bg-green-100 text-green-800 p-6 rounded-lg mb-8">
           <h1 className="text-3xl font-bold mb-4">Quote Request Submitted!</h1>
@@ -35,7 +33,6 @@ const QuoteSuccessPage: React.FC = () => {
           </Button>
         </div>
       </div>
-    </Layout>
   );
 };
 
