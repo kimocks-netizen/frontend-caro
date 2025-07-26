@@ -1,5 +1,6 @@
 // components/ui/Select.tsx
 import React from 'react';
+import { useTheme } from '../../context/ThemeContext';
 
 interface SelectProps {
   label: string;
@@ -11,22 +12,36 @@ interface SelectProps {
 }
 
 const Select: React.FC<SelectProps> = ({ label, value, onChange, options, required = false,  disabled = false }) => {
+  const { isDarkMode } = useTheme();
+
   return (
     <div className="mb-4">
-      <label className="block text-sm font-medium mb-1">
+      <label className={`block text-sm font-medium mb-1 ${
+        isDarkMode ? 'text-gray-300' : 'text-gray-700'
+      }`}>
         {label}
         {required && <span className="text-red-500">*</span>}
       </label>
       <select
         value={value}
         onChange={onChange}
-        className="w-full px-3 py-2 border rounded-md"
+        className={`w-full px-3 py-2 border rounded-md transition-colors ${
+          isDarkMode
+            ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500'
+            : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-purple-500 focus:ring-purple-500'
+        } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
         required={required}
-         disabled={disabled} 
+        disabled={disabled} 
       >
-        <option value="">Select a category</option>
+        <option value="" className={isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'}>
+          Select a category
+        </option>
         {options.map(option => (
-          <option key={option.value} value={option.value}>
+          <option 
+            key={option.value} 
+            value={option.value}
+            className={isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'}
+          >
             {option.label}
           </option>
         ))}

@@ -21,7 +21,7 @@ const Home: React.FC = () => {
 
   const handleGetQuoteClick = () => {
     if (cartItems.length === 0) {
-      navigate('/products');
+      navigate('/quote/request');
     } else {
       navigate('/quote');
     }
