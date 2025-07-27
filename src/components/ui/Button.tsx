@@ -1,13 +1,12 @@
 import React from 'react';
 import { useTheme } from '../../context/ThemeContext';
 
-type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
-type ButtonSize = 'sm' | 'md' | 'lg';
-
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: ButtonVariant;
-  size?: ButtonSize;
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
+  children: React.ReactNode;
+  className?: string;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -23,14 +22,18 @@ const Button: React.FC<ButtonProps> = ({
   const baseClasses = 'rounded-md font-medium transition-all disabled:opacity-70 focus:outline-none focus:ring-2 focus:ring-offset-2';
   
   const variantClasses = {
-    primary: 'bg-purple-600 text-white hover:bg-purple-700 focus:ring-purple-500',
-    secondary: 'bg-amber-500 text-gray-900 hover:bg-amber-600 focus:ring-amber-400',
+    primary: isDarkMode 
+      ? 'bg-primary-dark text-white hover:bg-purple-700 focus:ring-primary-dark'
+      : 'bg-primary text-white hover:bg-purple-700 focus:ring-primary',
+    secondary: isDarkMode 
+      ? 'bg-accent-dark text-gray-900 hover:bg-yellow-600 focus:ring-accent-dark'
+      : 'bg-accent text-gray-900 hover:bg-yellow-600 focus:ring-accent',
     outline: isDarkMode 
-      ? 'border border-gray-600 bg-transparent text-gray-300 hover:bg-gray-700 hover:text-white focus:ring-purple-500' 
-      : 'border border-gray-300 bg-transparent text-gray-700 hover:bg-gray-50 focus:ring-purple-500',
+      ? 'border border-gray-600 bg-transparent text-gray-300 hover:bg-gray-700 hover:text-white focus:ring-primary-dark' 
+      : 'border border-gray-300 bg-transparent text-gray-700 hover:bg-gray-50 focus:ring-primary',
     ghost: isDarkMode 
-      ? 'bg-transparent text-gray-300 hover:bg-gray-700 focus:ring-purple-500' 
-      : 'bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-purple-500',
+      ? 'bg-transparent text-gray-300 hover:bg-gray-700 focus:ring-primary-dark' 
+      : 'bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-primary',
   };
 
   const sizeClasses = {

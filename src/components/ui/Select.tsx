@@ -27,8 +27,8 @@ const Select: React.FC<SelectProps> = ({ label, value, onChange, options, requir
         onChange={onChange}
         className={`w-full px-3 py-2 border rounded-md transition-colors ${
           isDarkMode
-            ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-purple-500'
-            : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-purple-500 focus:ring-purple-500'
+            ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-primary-dark focus:ring-primary-dark'
+            : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-primary focus:ring-primary'
         } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
         required={required}
         disabled={disabled} 

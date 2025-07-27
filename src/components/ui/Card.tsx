@@ -1,10 +1,12 @@
 import React from 'react';
 import { useTheme } from '../../context/ThemeContext';
 
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+interface CardProps {
   title?: string;
   description?: string;
   footer?: React.ReactNode;
+  children?: React.ReactNode;
+  className?: string;
 }
 
 const Card: React.FC<CardProps> = ({ 
@@ -28,7 +30,7 @@ const Card: React.FC<CardProps> = ({
         <div className="p-6 border-b border-gray-200 dark:border-gray-600">
           {title && (
             <h3 className={`text-xl font-semibold ${
-              isDarkMode ? 'text-purple-300' : 'text-purple-700'
+              isDarkMode ? 'text-primary-dark' : 'text-primary'
             }`}>
               {title}
             </h3>

@@ -8,6 +8,7 @@ interface FileInputProps {
   multiple?: boolean;
   accept?: string;
   disabled?: boolean;
+  className?: string;
 }
 
 const FileInput: React.FC<FileInputProps> = ({ 
@@ -16,6 +17,7 @@ const FileInput: React.FC<FileInputProps> = ({
   multiple = false, 
   accept = 'image/*',
   disabled = false,
+  className,
   ...props 
 }) => {
   const { isDarkMode } = useTheme();
@@ -58,13 +60,15 @@ const FileInput: React.FC<FileInputProps> = ({
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        className={`border-2 border-dashed rounded-md p-4 text-center ${
-          isDragging 
-            ? 'border-purple-500 bg-purple-50 dark:bg-gray-700' 
+        className={`w-full px-3 py-2 border-2 border-dashed rounded-lg transition-colors ${
+          isDragging
+            ? isDarkMode 
+              ? 'border-primary-dark bg-purple-50 dark:bg-gray-700'
+              : 'border-primary bg-purple-50 dark:bg-gray-700'
             : isDarkMode 
-              ? 'border-gray-600' 
-              : 'border-gray-300'
-        }`}
+              ? 'border-gray-600 bg-gray-700 hover:border-gray-500' 
+              : 'border-gray-300 bg-white hover:border-gray-400'
+        } ${className}`}
       >
         <input
           type="file"
@@ -79,14 +83,12 @@ const FileInput: React.FC<FileInputProps> = ({
         <label
           htmlFor="file-upload"
           className={`cursor-pointer ${
-            isDarkMode ? 'text-purple-300' : 'text-purple-600'
+            isDarkMode ? 'text-primary-dark' : 'text-primary'
           } font-medium`}
         >
           {isDragging ? 'Drop images here' : 'Click to select or drag and drop'}
         </label>
-        <p className={`text-xs mt-1 ${
-          isDarkMode ? 'text-gray-400' : 'text-gray-500'
-        }`}>
+        <p className={`text-sm ${isDarkMode ? 'text-primary-dark' : 'text-primary'}`}>
           {multiple ? 'Multiple images allowed' : 'Single image only'}
         </p>
       </div>

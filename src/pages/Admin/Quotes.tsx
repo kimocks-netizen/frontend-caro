@@ -64,15 +64,15 @@ const AdminQuotes: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-status-pending text-white';
       case 'in_progress':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-status-in_progress text-white';
       case 'quoted':
-        return 'bg-green-100 text-green-800';
+        return 'bg-status-quoted text-white';
       case 'quote_issued':
-        return 'bg-purple-100 text-purple-800';
+        return 'bg-status-quote_issued text-white';
       case 'rejected':
-        return 'bg-red-100 text-red-800';
+        return 'bg-status-rejected text-white';
       default:
         return 'bg-gray-100 text-gray-800';
     }

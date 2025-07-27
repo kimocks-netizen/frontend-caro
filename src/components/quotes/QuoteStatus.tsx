@@ -53,15 +53,15 @@ const QuoteStatus: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'pending': 
-        return isDarkMode ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800';
+        return isDarkMode ? 'bg-status-pending text-white' : 'bg-status-pending text-white';
       case 'in_progress': 
-        return isDarkMode ? 'bg-yellow-900 text-yellow-200' : 'bg-yellow-100 text-yellow-800';
+        return isDarkMode ? 'bg-status-in_progress text-white' : 'bg-status-in_progress text-white';
       case 'quoted': 
-        return isDarkMode ? 'bg-green-900 text-green-200' : 'bg-green-100 text-green-800';
+        return isDarkMode ? 'bg-status-quoted text-white' : 'bg-status-quoted text-white';
       case 'quote_issued': 
-        return isDarkMode ? 'bg-purple-900 text-purple-200' : 'bg-purple-100 text-purple-800';
+        return isDarkMode ? 'bg-status-quote_issued text-white' : 'bg-status-quote_issued text-white';
       case 'rejected': 
-        return isDarkMode ? 'bg-red-900 text-red-200' : 'bg-red-100 text-red-800';
+        return isDarkMode ? 'bg-status-rejected text-white' : 'bg-status-rejected text-white';
       default: 
         return isDarkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-100 text-gray-800';
     }
@@ -100,11 +100,11 @@ const QuoteStatus: React.FC = () => {
                 value={trackingCode}
                 onChange={(e) => setTrackingCode(e.target.value)}
                 placeholder="Enter tracking code"
-                className={`flex-grow px-3 sm:px-4 py-2 sm:py-3 border rounded-md text-sm sm:text-base ${
+                className={`w-full px-4 py-2 border rounded-md transition-colors ${
                   isDarkMode 
-                    ? 'bg-gray-600 border-gray-500 text-white placeholder-gray-400' 
-                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
-                } focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-primary focus:ring-primary' 
+                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-primary focus:ring-primary'
+                } focus:outline-none focus:ring-2 focus:ring-primary`}
                 required
               />
               <Button 
@@ -122,7 +122,7 @@ const QuoteStatus: React.FC = () => {
         {loading && (
           <div className="text-center py-4">
             <div className="inline-flex items-center">
-              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-purple-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>

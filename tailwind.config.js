@@ -1,4 +1,5 @@
 // tailwind.config.js
+// tailwind.config.js
 module.exports = {
   darkMode: 'class',
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
@@ -6,12 +7,27 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#6D28D9',
-          dark: '#8B5CF6'
+          DEFAULT: '#6D28D9', // Deep violet
+          dark: '#8B5CF6'     // Lighter violet for dark mode
         },
         accent: {
-          DEFAULT: '#FCD34D',
-          dark: '#FDE68A'
+          DEFAULT: '#FCD34D', // Warm sand/gold
+          dark: '#FDE68A'     // Lighter gold for dark mode
+        },
+        background: {
+          light: '#FAF9F6',   // Off-white cream
+          dark: '#1F2937'     // Dark gray
+        },
+        text: {
+          light: '#1F2937',   // Dark gray
+          dark: '#F3F4F6'     // Light gray
+        },
+        status: {
+          pending: '#A78BFA',      // Light lavender
+          in_progress: '#A78BFA',  // Same as pending
+          quoted: '#34D399',       // Minty green
+          rejected: '#F87171',     // Red
+          quote_issued: '#D97706'  // Burnt orange
         }
       }
     }

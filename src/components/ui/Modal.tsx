@@ -44,7 +44,7 @@ const Modal: React.FC<ModalProps> = ({
             }`}>
               {title && (
                 <h3 className={`text-lg font-semibold ${
-                  isDarkMode ? 'text-purple-300' : 'text-purple-700'
+                  isDarkMode ? 'text-primary-dark' : 'text-primary'
                 }`}>
                   {title}
                 </h3>

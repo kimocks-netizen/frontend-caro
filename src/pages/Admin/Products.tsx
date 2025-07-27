@@ -342,7 +342,7 @@ const handleImageUpload = async (files: FileList) => {
             {imageUploadProgress > 0 && imageUploadProgress < 100 && (
               <div className="w-full bg-gray-200 rounded-full h-2.5">
                 <div 
-                  className="bg-purple-600 h-2.5 rounded-full" 
+                  className="bg-primary h-2.5 rounded-full" 
                   style={{ width: `${imageUploadProgress}%` }}
                 ></div>
               </div>

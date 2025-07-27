@@ -81,17 +81,17 @@ const Header: React.FC = () => {
           <div className="flex items-center space-x-2">
             <button 
               onClick={() => handleNavClick('/')}
-              className={`text-xl font-bold hover:text-purple-600 transition-colors ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+              className={`text-xl font-bold hover:text-primary transition-colors ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
             >
               CaroParts
             </button>
           </div>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex space-x-6">
+          <nav className="hidden md:flex items-center space-x-8">
             <button 
               onClick={() => handleNavClick('/')} 
-              className={`hover:text-purple-600 transition-colors ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
+              className={`hover:text-primary transition-colors ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
             >
               Home
             </button>
@@ -99,25 +99,25 @@ const Header: React.FC = () => {
               <>
                 <button 
                   onClick={() => handleNavClick('/products')} 
-                  className={`hover:text-purple-600 transition-colors ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
+                  className={`hover:text-primary transition-colors ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
                 >
                   Products
                 </button>
                 <button 
                   onClick={() => handleNavClick('/quote')} 
-                  className={`hover:text-purple-600 transition-colors ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
+                  className={`hover:text-primary transition-colors ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
                 >
                   Request Quote
                 </button>
                 <button 
                   onClick={() => handleNavClick('/quote/track')} 
-                  className={`hover:text-purple-600 transition-colors ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
+                  className={`hover:text-primary transition-colors ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
                 >
                   Track Quotes
                 </button>
                 <button 
                   onClick={() => handleNavClick('/admin')} 
-                  className={`hover:text-purple-600 transition-colors ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
+                  className={`hover:text-primary transition-colors ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
                 >
                   Admin
                 </button>
@@ -127,22 +127,22 @@ const Header: React.FC = () => {
             {isAuthenticated && (
               <>
                 <button 
+                  onClick={() => handleNavClick('/admin/dashboard')} 
+                  className={`hover:text-primary transition-colors ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
+                >
+                  Dashboard
+                </button>
+                <button 
                   onClick={() => handleNavClick('/admin/products')} 
-                  className={`hover:text-purple-600 transition-colors ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
+                  className={`hover:text-primary transition-colors ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
                 >
                   Products
                 </button>
                 <button 
                   onClick={() => handleNavClick('/admin/quotes')} 
-                  className={`hover:text-purple-600 transition-colors ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
+                  className={`hover:text-primary transition-colors ${isDarkMode ? 'text-gray-200' : 'text-gray-700'}`}
                 >
-                  Manage Quotes
-                </button>
-                <button 
-                  onClick={handleLogout} 
-                  className="text-red-500 hover:text-red-700 transition-colors"
-                >
-                  Logout
+                  Quotes
                 </button>
               </>
             )}
@@ -169,8 +169,8 @@ const Header: React.FC = () => {
                 stroke="currentColor"
                 className={`w-8 h-8 ${
                   isDarkMode 
-                    ? 'text-white hover:text-purple-400' 
-                    : 'text-gray-700 hover:text-black'
+                    ? 'text-white hover:text-primary-dark' 
+                    : 'text-gray-700 hover:text-primary'
                 }`}
               >
                 <path

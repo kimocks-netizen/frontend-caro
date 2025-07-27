@@ -82,12 +82,12 @@ const Home: React.FC = () => {
         </div>
 
         {/* Call to Action */}
-        <div className={`p-6 sm:p-8 rounded-lg ${isDarkMode ? 'bg-purple-900 border border-purple-700' : 'bg-purple-100 border border-purple-200'}`}>
-          <h2 className={`text-xl sm:text-2xl font-bold mb-3 sm:mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Ready to get started?</h2>
-          <p className={`mb-4 sm:mb-6 text-sm sm:text-base ${isDarkMode ? 'text-purple-200' : 'text-gray-700'}`}>Request a quote today and our team will get back to you within 24 hours</p>
+        <div className={`p-6 sm:p-8 rounded-lg ${isDarkMode ? 'bg-primary-dark border border-primary' : 'bg-primary border border-primary-dark'}`}>
+          <h2 className={`text-xl sm:text-2xl font-bold mb-3 sm:mb-4 ${isDarkMode ? 'text-white' : 'text-white'}`}>Ready to get started?</h2>
+          <p className={`mb-4 sm:mb-6 text-sm sm:text-base ${isDarkMode ? 'text-purple-200' : 'text-purple-100'}`}>Request a quote today and our team will get back to you within 24 hours</p>
           <Button 
             onClick={handleGetQuoteClick}
-            variant={isDarkMode ? "secondary" : "primary"}
+            variant={isDarkMode ? "secondary" : "secondary"}
             size="lg"
             className="w-full sm:w-auto"
           >
