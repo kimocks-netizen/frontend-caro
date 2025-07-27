@@ -79,11 +79,17 @@ const Header: React.FC = () => {
       <header className={`sticky top-0 z-50 ${navBackground} shadow-md border-b`}>
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-2">
+            <img 
+              src="/src/components/layout/logo.png" 
+              alt="Caro Group Logo" 
+              className="h-10 w-auto rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={() => handleNavClick('/')}
+            />
             <button 
               onClick={() => handleNavClick('/')}
               className={`text-xl font-bold hover:text-purple-600 transition-colors ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
             >
-              Caro Group
+              Caro Group 
             </button>
           </div>
 
