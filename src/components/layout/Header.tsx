@@ -52,8 +52,12 @@ const Header: React.FC = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/');
-    setIsOpen(false);
+    
+    // Add a longer delay to ensure logout completes
+    setTimeout(() => {
+      navigate('/');
+      setIsOpen(false);
+    }, 100);
   };
 
   const handleCartClick = () => {
