@@ -21,7 +21,7 @@ const Footer = () => {
               Caro Group Investments
             </h3>
             <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Premium equipment and services in Centurion. Give your Business the best with Caro Group Investments.
+              Premium packaging and services in Centurion. Give your Business the best with Caro Group Investments.
             </p>
           </div>
 

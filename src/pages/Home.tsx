@@ -33,7 +33,7 @@ const Home: React.FC = () => {
         {/* Hero Section */}
         <div className="mb-12 sm:mb-16">
           <h1 className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-            Premium Equipment and Parts at Competitive Prices
+            Premium Packaging at Competitive Prices
           </h1>
           <p className={`text-lg sm:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
             Request quotes for high-quality equipment and parts and get the best deals delivered to your inbox
