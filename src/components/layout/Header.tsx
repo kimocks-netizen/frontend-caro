@@ -83,7 +83,7 @@ const Header: React.FC = () => {
               onClick={() => handleNavClick('/')}
               className={`text-xl font-bold hover:text-purple-600 transition-colors ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
             >
-              CaroParts
+              Caro Group
             </button>
           </div>
 
