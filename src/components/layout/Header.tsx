@@ -4,6 +4,7 @@ import { useCart } from '../../context/CartContext';
 import Button from '../ui/Button';
 import { useAuth } from '../../context/useAuth';
 import { useNavigate } from 'react-router-dom';
+import LogoImage from '../layout/logo.png';
 
 const Header: React.FC = () => {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -80,7 +81,7 @@ const Header: React.FC = () => {
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <img 
-              src="/src/components/layout/logo.png" 
+              src={LogoImage}  
               alt="Caro Group Logo" 
               className="h-10 w-auto rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
               onClick={() => handleNavClick('/')}

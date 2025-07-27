@@ -64,18 +64,18 @@ const Home: React.FC = () => {
 
         {/* Features Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
-          <div className={`p-4 sm:p-6 rounded-lg ${isDarkMode ? 'bg-gray-700 border border-gray-600' : 'bg-gray-50 border border-gray-200'}`}>
-            <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">🚚</div>
+          <div className={`p-4 sm:p-6 rounded-lg transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-xl cursor-pointer ${isDarkMode ? 'bg-gray-700 border border-gray-600 hover:bg-gray-600' : 'bg-gray-50 border border-gray-200 hover:bg-white hover:shadow-lg'}`}>
+            <div className="text-3xl sm:text-4xl mb-3 sm:mb-4 transform transition-transform duration-300 hover:scale-110">🚚</div>
             <h3 className={`text-lg sm:text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Fast Delivery</h3>
             <p className={`text-sm sm:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Get your parts shipped quickly to your location</p>
           </div>
-          <div className={`p-4 sm:p-6 rounded-lg ${isDarkMode ? 'bg-gray-700 border border-gray-600' : 'bg-gray-50 border border-gray-200'}`}>
-            <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">💰</div>
+          <div className={`p-4 sm:p-6 rounded-lg transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-xl cursor-pointer ${isDarkMode ? 'bg-gray-700 border border-gray-600 hover:bg-gray-600' : 'bg-gray-50 border border-gray-200 hover:bg-white hover:shadow-lg'}`}>
+            <div className="text-3xl sm:text-4xl mb-3 sm:mb-4 transform transition-transform duration-300 hover:scale-110">💰</div>
             <h3 className={`text-lg sm:text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Best Prices</h3>
             <p className={`text-sm sm:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Competitive pricing with no hidden fees</p>
           </div>
-          <div className={`p-4 sm:p-6 rounded-lg ${isDarkMode ? 'bg-gray-700 border border-gray-600' : 'bg-gray-50 border border-gray-200'}`}>
-            <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">🛠️</div>
+          <div className={`p-4 sm:p-6 rounded-lg transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-xl cursor-pointer ${isDarkMode ? 'bg-gray-700 border border-gray-600 hover:bg-gray-600' : 'bg-gray-50 border border-gray-200 hover:bg-white hover:shadow-lg'}`}>
+            <div className="text-3xl sm:text-4xl mb-3 sm:mb-4 transform transition-transform duration-300 hover:scale-110">🛠️</div>
             <h3 className={`text-lg sm:text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Quality Parts</h3>
             <p className={`text-sm sm:text-base ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Premium components from trusted manufacturers</p>
           </div>

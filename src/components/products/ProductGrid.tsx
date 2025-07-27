@@ -37,7 +37,9 @@ const ProductGrid: React.FC = () => {
   return (
     <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
       {products.map(product => (
-        <ProductCard key={product.id} product={product} />
+        <div key={product.id} className="transform transition-all duration-300 hover:scale-80 hover:-translate-y-2 hover:shadow-xl ">
+          <ProductCard product={product} />
+        </div>
       ))}
     </div>
   );

@@ -328,7 +328,8 @@ const handleImageUpload = async (files: FileList) => {
       </div>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} 
-             title={currentProduct?.id ? 'Edit Product' : 'Add Product'}>
+             title={currentProduct?.id ? 'Edit Product' : 'Add Product'}
+             size="md">
         {currentProduct && (
           <form onSubmit={handleSubmit} className="space-y-4">
             <FileInput
@@ -427,7 +428,7 @@ const handleImageUpload = async (files: FileList) => {
 
             {error && <p className="text-red-500">{error}</p>}
 
-            <div className="mt-4 flex justify-end space-x-2">
+            <div className="flex justify-end space-x-2">
               <Button 
                 type="button" 
                 variant="ghost" 

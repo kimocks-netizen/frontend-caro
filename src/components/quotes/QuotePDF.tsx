@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { FaDownload, FaPrint, FaTimes } from 'react-icons/fa';
 import html2pdf from 'html2pdf.js';
+import { useTheme } from '../../context/ThemeContext';
 
 interface QuotePDFProps {
   quote: any;
@@ -9,6 +10,7 @@ interface QuotePDFProps {
 
 const QuotePDF: React.FC<QuotePDFProps> = ({ quote, onClose }) => {
   const pdfRef = useRef<HTMLDivElement>(null);
+  const { isDarkMode } = useTheme();
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-ZA', {
@@ -74,9 +76,15 @@ const QuotePDF: React.FC<QuotePDFProps> = ({ quote, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
-      <div className="bg-white rounded-lg w-full max-w-4xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden flex flex-col">
-        <div className="sticky top-0 bg-white border-b p-3 sm:p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-          <h2 className="text-lg sm:text-xl font-bold text-gray-900">Quote PDF - {quote.quote_number}</h2>
+      <div className={`rounded-lg w-full max-w-4xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden flex flex-col ${
+        isDarkMode ? 'bg-gray-800' : 'bg-white'
+      }`}>
+        <div className={`sticky top-0 border-b p-3 sm:p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 ${
+          isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+        }`}>
+          <h2 className={`text-lg sm:text-xl font-bold ${
+            isDarkMode ? 'text-white' : 'text-gray-900'
+          }`}>Quote PDF - {quote.quote_number}</h2>
           <div className="flex flex-wrap gap-2 w-full sm:w-auto">
             <button
               onClick={handlePrint}
@@ -147,17 +155,17 @@ const QuotePDF: React.FC<QuotePDFProps> = ({ quote, onClose }) => {
                   <table className="w-full border-collapse border border-gray-300 text-sm sm:text-base">
                     <thead>
                       <tr className="bg-gray-100">
-                        <th className="border border-gray-300 p-2 sm:p-3 text-left font-semibold">Description</th>
-                        <th className="border border-gray-300 p-2 sm:p-3 text-center font-semibold">Qty</th>
-                        <th className="border border-gray-300 p-2 sm:p-3 text-right font-semibold">Unit Price</th>
-                        <th className="border border-gray-300 p-2 sm:p-3 text-right font-semibold">Total</th>
+                        <th className="border border-gray-300 p-2 sm:p-3 text-left font-semibold text-gray-900">Description</th>
+                        <th className="border border-gray-300 p-2 sm:p-3 text-center font-semibold text-gray-900">Qty</th>
+                        <th className="border border-gray-300 p-2 sm:p-3 text-right font-semibold text-gray-900">Unit Price</th>
+                        <th className="border border-gray-300 p-2 sm:p-3 text-right font-semibold text-gray-900">Total</th>
                       </tr>
                     </thead>
                     <tbody>
                       {quote.quote_items?.map((item: any, index: number) => (
                         <tr key={index} className="border-b border-gray-300">
                           <td className="border border-gray-300 p-2 sm:p-3">
-                            <div className="font-semibold text-sm sm:text-base">{item.product?.title}</div>
+                            <div className="font-semibold text-sm sm:text-base text-gray-900">{item.product?.title}</div>
                             <div className="text-xs sm:text-sm text-gray-600">{item.product?.description}</div>
                             {item.message && (
                               <div className="text-xs sm:text-sm text-gray-500 italic mt-1">
@@ -165,9 +173,9 @@ const QuotePDF: React.FC<QuotePDFProps> = ({ quote, onClose }) => {
                               </div>
                             )}
                           </td>
-                          <td className="border border-gray-300 p-2 sm:p-3 text-center">{item.quantity}</td>
-                          <td className="border border-gray-300 p-2 sm:p-3 text-right">{formatCurrency(parseFloat(item.unit_price) || 0)}</td>
-                          <td className="border border-gray-300 p-2 sm:p-3 text-right">{formatCurrency((parseFloat(item.unit_price) || 0) * item.quantity)}</td>
+                          <td className="border border-gray-300 p-2 sm:p-3 text-center text-gray-900">{item.quantity}</td>
+                          <td className="border border-gray-300 p-2 sm:p-3 text-right text-gray-900">{formatCurrency(parseFloat(item.unit_price) || 0)}</td>
+                          <td className="border border-gray-300 p-2 sm:p-3 text-right text-gray-900">{formatCurrency((parseFloat(item.unit_price) || 0) * item.quantity)}</td>
                         </tr>
                       ))}
                     </tbody>

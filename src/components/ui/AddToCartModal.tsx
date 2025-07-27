@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { useTheme } from '../../context/ThemeContext';
 import Button from './Button';
 
@@ -21,7 +22,7 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
 
   if (!isOpen) return null;
 
-  return (
+  const modalContent = (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div className="fixed inset-0 transition-opacity" onClick={onClose}>
@@ -77,6 +78,9 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
       </div>
     </div>
   );
+
+  // Use portal to render at the top level of the document
+  return createPortal(modalContent, document.body);
 };
 
 export default AddToCartModal; 
