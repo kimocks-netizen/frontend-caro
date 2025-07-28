@@ -130,11 +130,11 @@ const QuotePDF: React.FC<QuotePDFProps> = ({ quote, onClose }) => {
 
               {/* Quote Details */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 mb-6 sm:mb-8">
-                <div>
-                  <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-4">Quote To:</h2>
-                  <div className="text-gray-700">
-                    <p className="font-semibold text-base sm:text-lg">{quote.guest_name}</p>
-                    <p className="text-sm sm:text-base">{quote.guest_email}</p>
+                <div className="text-left">
+                  <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-4 text-left">Quote To:</h2>
+                  <div className="text-gray-700 text-left">
+                    <p className="font-semibold text-base sm:text-lg text-left">{quote.guest_name}</p>
+                    <p className="text-sm sm:text-base text-left">{quote.guest_email}</p>
                   </div>
                 </div>
                 <div className="text-left md:text-right">
@@ -164,11 +164,11 @@ const QuotePDF: React.FC<QuotePDFProps> = ({ quote, onClose }) => {
                     <tbody>
                       {quote.quote_items?.map((item: any, index: number) => (
                         <tr key={index} className="border-b border-gray-300">
-                          <td className="border border-gray-300 p-2 sm:p-3">
-                            <div className="font-semibold text-sm sm:text-base text-gray-900">{item.product?.title}</div>
-                            <div className="text-xs sm:text-sm text-gray-600">{item.product?.description}</div>
+                          <td className="border border-gray-300 p-2 sm:p-3 text-left">
+                            <div className="font-semibold text-sm sm:text-base text-gray-900 text-left">{item.product?.title}</div>
+                            <div className="text-xs sm:text-sm text-gray-600 text-left">{item.product?.description}</div>
                             {item.message && (
-                              <div className="text-xs sm:text-sm text-gray-500 italic mt-1">
+                              <div className="text-xs sm:text-sm text-gray-500 italic mt-1 text-left">
                                 Note: {item.message}
                               </div>
                             )}
@@ -195,27 +195,27 @@ const QuotePDF: React.FC<QuotePDFProps> = ({ quote, onClose }) => {
               </div>
 
               {/* Terms & Conditions */}
-              <div className="mb-6 sm:mb-8">
-                <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Terms & Conditions</h2>
-                <ul className="text-xs sm:text-sm text-gray-700 space-y-1 sm:space-y-2">
-                  <li>• This quote is valid for 7 days from the date of issue</li>
-                  <li>• Prices are subject to change without prior notice</li>
-                  <li>• Payment terms: 50% deposit required on order confirmation</li>
-                  <li>• Delivery time: 5-10 business days after payment confirmation</li>
-                  <li>• All prices include VAT at 15%</li>
-                  <li>• Returns accepted within 7 days of delivery (subject to conditions)</li>
+              <div className="mb-6 sm:mb-8 text-left">
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4 text-left">Terms & Conditions</h2>
+                <ul className="text-xs sm:text-sm text-gray-700 space-y-1 sm:space-y-2 text-left">
+                  <li className="text-left">• This quote is valid for 7 days from the date of issue</li>
+                  <li className="text-left">• Prices are subject to change without prior notice</li>
+                  <li className="text-left">• Payment terms: 50% deposit required on order confirmation</li>
+                  <li className="text-left">• Delivery time: 5-10 business days after payment confirmation</li>
+                  <li className="text-left">• All prices include VAT at 15%</li>
+                  <li className="text-left">• Returns accepted within 7 days of delivery (subject to conditions)</li>
                 </ul>
               </div>
 
               {/* Banking Details */}
-              <div className="mb-6 sm:mb-8 bg-gray-50 p-4 sm:p-6 rounded-lg">
-                <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Banking Details</h2>
-                <div className="text-gray-700 text-sm sm:text-base">
-                  <p><strong>Bank Name:</strong> FNB</p>
-                  <p><strong>Branch Code:</strong> 250856</p>
-                  <p><strong>Swift Code:</strong> FNBNZAJJ</p>
-                  <p><strong>Account Number:</strong> 62890768371</p>
-                  <p><strong>Payment Reference:</strong> {quote.quote_number}</p>
+              <div className="mb-6 sm:mb-8 bg-gray-50 p-4 sm:p-6 rounded-lg text-left">
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4 text-left">Banking Details</h2>
+                <div className="text-gray-700 text-sm sm:text-base text-left">
+                  <p className="text-left"><strong>Bank Name:</strong> FNB</p>
+                  <p className="text-left"><strong>Branch Code:</strong> 250856</p>
+                  <p className="text-left"><strong>Swift Code:</strong> FNBNZAJJ</p>
+                  <p className="text-left"><strong>Account Number:</strong> 62890768371</p>
+                  <p className="text-left"><strong>Payment Reference:</strong> {quote.quote_number}</p>
                 </div>
               </div>
 
