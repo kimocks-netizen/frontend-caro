@@ -4,7 +4,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthProvider';
 import AppRoutes from './routes';
-import WhatsAppWidgetLoader from './components/WhatsAppWidgetLoader';
+//import WhatsAppWidgetLoader from './components/WhatsAppWidgetLoader';
 
 const App: React.FC = () => {
   return (
@@ -18,7 +18,7 @@ const App: React.FC = () => {
         </CartProvider>
       </AuthProvider>
     </ThemeProvider>
-    <WhatsAppWidgetLoader/>
+    {/*<WhatsAppWidgetLoader/>*/}
      </>
   );
 };
