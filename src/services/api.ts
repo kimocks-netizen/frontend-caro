@@ -1,5 +1,5 @@
 import type { Quote, QuoteRequestData, QuoteResponse } from "../types/quote";
-const API_BASE_URL = 'https://caro-backend-h1rh.onrender.com/api';
+const API_BASE_URL = 'https://caro-backend.fly.dev/api';
 
 //const API_BASE_URL = 'https://caro-backend-production.up.railway.app/api'; 
 //const API_BASE_URL = 'http://localhost:3000/api';
