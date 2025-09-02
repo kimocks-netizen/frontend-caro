@@ -27,7 +27,7 @@ const QuotesTableSkeleton: React.FC<QuotesTableSkeletonProps> = ({ rows = 5 }) =
             isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
           }`}>
             <tr>
-              {['Tracking Code', 'Customer', 'Items', 'Status', 'Created', 'Actions'].map((header, index) => (
+              {['Tracking Code', 'Customer', 'Items', 'Status', 'Created', 'Actions'].map(( index) => (
                 <th key={index} className={`py-3 px-4 border-b text-left text-sm font-medium ${
                   isDarkMode ? 'text-gray-300 border-gray-600' : 'text-gray-700 border-gray-200'
                 }`}>

@@ -7,7 +7,7 @@ import Select from '../../components/ui/Select';
 import FileInput from '../../components/ui/FileInput';
 import { uploadProductImages, deleteProductImage } from '../../services/supabase';
 import { useTheme } from '../../context/ThemeContext';
-import LoadingSpinner from '../../components/ui/LoadingSpinner';
+//import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import ProductSkeleton from '../../components/ui/ProductSkeleton';
 //import { supabase, uploadProductImages, deleteProductImage } from '../../services/supabase';
 
