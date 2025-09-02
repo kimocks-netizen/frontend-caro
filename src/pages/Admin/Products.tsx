@@ -7,6 +7,8 @@ import Select from '../../components/ui/Select';
 import FileInput from '../../components/ui/FileInput';
 import { uploadProductImages, deleteProductImage } from '../../services/supabase';
 import { useTheme } from '../../context/ThemeContext';
+import LoadingSpinner from '../../components/ui/LoadingSpinner';
+import ProductSkeleton from '../../components/ui/ProductSkeleton';
 //import { supabase, uploadProductImages, deleteProductImage } from '../../services/supabase';
 
 type Product = {
@@ -66,6 +68,9 @@ const AdminProducts: React.FC = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
+      const startTime = Date.now();
+      const minLoadingTime = 800; // Minimum loading time in milliseconds
+      
       try {
         const response = await api.products.getAll();
         if (response.success) {
@@ -75,7 +80,12 @@ const AdminProducts: React.FC = () => {
         console.error('Failed to fetch products', err);
         setError('Failed to fetch products');
       } finally {
-        setLoading(false);
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(0, minLoadingTime - elapsedTime);
+        
+        setTimeout(() => {
+          setLoading(false);
+        }, remainingTime);
       }
     };
     fetchProducts();
@@ -235,8 +245,17 @@ const handleImageUpload = async (files: FileList) => {
     });
   };
 
-  if (loading && !isModalOpen) return <div>Loading products...</div>;
-  if (error) return <div className="text-red-500">{error}</div>;
+  if (loading && !isModalOpen) return <ProductSkeleton count={6} />;
+  
+  if (error) return (
+    <div className={`p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
+      <div className={`text-center py-8 ${isDarkMode ? 'text-red-400' : 'text-red-500'}`}>
+        <div className="text-xl mb-2">⚠️</div>
+        <p className="text-lg font-medium">{error}</p>
+        <p className="text-sm mt-2">Please try refreshing the page</p>
+      </div>
+    </div>
+  );
 
   return (
     <div className={`p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>

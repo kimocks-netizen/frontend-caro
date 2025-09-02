@@ -8,26 +8,27 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  useEffect(() => {
-    // Check localStorage for saved theme preference
-    const savedMode = localStorage.getItem('darkMode');
-    if (savedMode !== null) {
-      setIsDarkMode(savedMode === 'true');
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setIsDarkMode(true);
+  const getInitialDarkMode = (): boolean => {
+    try {
+      const savedMode = localStorage.getItem('darkMode');
+      if (savedMode !== null) {
+        return savedMode === 'true';
+      }
+    } catch {
+      // ignore
     }
-  }, []);
+    return true; // Default to dark mode
+  };
+
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => getInitialDarkMode());
 
   useEffect(() => {
-    // Apply theme to document
+    // Apply theme to document and persist preference
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
-    // Save preference to localStorage
     localStorage.setItem('darkMode', String(isDarkMode));
   }, [isDarkMode]);
 

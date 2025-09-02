@@ -1,10 +1,11 @@
-import React,{useEffect} from 'react';
+import React,{useEffect, useState} from 'react';
 import { useTheme } from '../context/ThemeContext';
 import Button from '../components/ui/Button';
 import { useAuth } from '../context/useAuth';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import QuoteStatus from '../components/quotes/QuoteStatus';
+import ThemeBanner from '../components/ui/ThemeBanner';
 
 
 const Home: React.FC = () => {
@@ -12,12 +13,21 @@ const Home: React.FC = () => {
   const { isAuthenticated } = useAuth();
   const { cartItems } = useCart();
   const navigate = useNavigate();
+  const [showThemeBanner, setShowThemeBanner] = useState(false);
   
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/admin/dashboard');
     }
   }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    // Check if user has seen the theme banner before
+    const hasSeenThemeBanner = localStorage.getItem('hasSeenThemeBanner');
+    if (!hasSeenThemeBanner) {
+      setShowThemeBanner(true);
+    }
+  }, []);
 
   const handleGetQuoteClick = () => {
     if (cartItems.length === 0) {
@@ -27,8 +37,15 @@ const Home: React.FC = () => {
     }
   };
 
+  const handleThemeBannerClose = () => {
+    setShowThemeBanner(false);
+    localStorage.setItem('hasSeenThemeBanner', 'true');
+  };
+
   return (
-    <div className={`py-8 sm:py-12 px-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+    <>
+      {showThemeBanner && <ThemeBanner onClose={handleThemeBannerClose} />}
+      <div className={`py-8 sm:py-12 px-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
       <div className="max-w-4xl mx-auto text-center">
         {/* Hero Section */}
         <div className="mb-12 sm:mb-16">
@@ -96,6 +113,7 @@ const Home: React.FC = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

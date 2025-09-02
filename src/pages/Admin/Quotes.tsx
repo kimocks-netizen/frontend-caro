@@ -4,6 +4,8 @@ import { api } from '../../services/api';
 import Button from '../../components/ui/Button';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
+import LoadingSpinner from '../../components/ui/LoadingSpinner';
+import QuotesTableSkeleton from '../../components/ui/QuotesTableSkeleton';
 
 const AdminQuotes: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -11,11 +13,24 @@ const AdminQuotes: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
+  const [isPageLoading, setIsPageLoading] = useState(true);
   const navigate = useNavigate();
   const { isDarkMode } = useTheme();
 
   useEffect(() => {
+    // Simulate page loading time
+    const timer = setTimeout(() => {
+      setIsPageLoading(false);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
     const fetchQuotes = async () => {
+      const startTime = Date.now();
+      const minLoadingTime = 800; // Minimum loading time in milliseconds
+      
       try {
         const response = await api.quotes.getAll();
         if (response.success) {
@@ -27,12 +42,25 @@ const AdminQuotes: React.FC = () => {
         setError('An error occurred while fetching quotes');
         console.error('Error fetching quotes:', error);
       } finally {
-        setLoading(false);
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(0, minLoadingTime - elapsedTime);
+        
+        setTimeout(() => {
+          setLoading(false);
+        }, remainingTime);
       }
     };
 
     fetchQuotes();
   }, []);
+
+  if (isPageLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <LoadingSpinner text="Loading Admin Quotes..." size="lg" />
+      </div>
+    );
+  }
 
   const handleView = (id: string) => {
     console.log('Navigating to quote:', id);
@@ -95,8 +123,32 @@ const AdminQuotes: React.FC = () => {
     }
   };*/
 
-  if (loading) return <div>Loading quotes...</div>;
-  if (error) return <div className="text-red-500">{error}</div>;
+  if (loading) return <QuotesTableSkeleton rows={8} />;
+  
+  if (error) return (
+    <div className={`p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
+      <div className={`text-center py-8 ${isDarkMode ? 'text-red-400' : 'text-red-500'}`}>
+        <div className="text-xl mb-2">⚠️</div>
+        <p className="text-lg font-medium">{error}</p>
+        <p className="text-sm mt-2">Please try refreshing the page</p>
+      </div>
+    </div>
+  );
+
+  if (quotes.length === 0) {
+    return (
+      <div className={`p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>
+        <h1 className={`text-2xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+          Manage Quotes
+        </h1>
+        <div className={`text-center py-8 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+          <div className="text-4xl mb-4">📋</div>
+          <p className="text-lg font-medium">No quotes available</p>
+          <p className="text-sm mt-2">Quotes will appear here once customers submit them</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-white'}`}>

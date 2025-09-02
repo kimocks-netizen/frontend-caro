@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { api } from '../../services/api';
 import ProductCard from './ProductCard';
 import { useTheme } from '../../context/ThemeContext';
+//import LoadingSpinner from '../ui/LoadingSpinner';
+import ProductSkeleton from '../ui/ProductSkeleton';
 
 const ProductGrid: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -12,6 +14,9 @@ const ProductGrid: React.FC = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
+      const startTime = Date.now();
+      const minLoadingTime = 800; // Minimum loading time in milliseconds
+      
       try {
         const response = await api.products.getAll();
         if (response.success) {
@@ -23,16 +28,34 @@ const ProductGrid: React.FC = () => {
       } catch (err) {
         setError('An error occurred while fetching products');
       } finally {
-        setLoading(false);
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(0, minLoadingTime - elapsedTime);
+        
+        setTimeout(() => {
+          setLoading(false);
+        }, remainingTime);
       }
     };
 
     fetchProducts();
   }, []);
 
-  if (loading) return <div className="text-center py-8">Loading products...</div>;
-  if (error) return <div className="text-center py-8 text-red-500">{error}</div>;
-  if (products.length === 0) return <div className="text-center py-8">No products available</div>;
+  if (loading) return <ProductSkeleton count={8} />;
+  if (error) return (
+    <div className={`text-center py-8 ${isDarkMode ? 'text-red-400' : 'text-red-500'}`}>
+      <div className="text-xl mb-2">⚠️</div>
+      <p className="text-lg font-medium">{error}</p>
+      <p className="text-sm mt-2">Please try refreshing the page</p>
+    </div>
+  );
+  
+  if (products.length === 0) return (
+    <div className={`text-center py-8 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+      <div className="text-4xl mb-4">📦</div>
+      <p className="text-lg font-medium">No products available</p>
+      <p className="text-sm mt-2">Check back later for new products</p>
+    </div>
+  );
 
   return (
     <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
