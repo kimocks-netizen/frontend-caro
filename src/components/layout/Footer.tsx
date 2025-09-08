@@ -21,7 +21,7 @@ const Footer = () => {
               Caro Group Investments
             </h3>
             <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Premium packaging and services in Centurion. Give your Business the best with Caro Group Investments.
+            Boost your business with world-class machinery and premium packaging in Africa. Caro Group Investments, where quality meets growth.
             </p>
           </div>
 

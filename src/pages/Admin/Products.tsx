@@ -47,6 +47,7 @@ const categories = [
   { id: '3', name: 'Grinding Mills' },
   { id: '4', name: 'Electric Cables' },
   { id: '5', name: 'Equipment' },
+  { id: '6', name: 'Oil Machinery' }
 ];
 
 // Helper function to get category name by ID

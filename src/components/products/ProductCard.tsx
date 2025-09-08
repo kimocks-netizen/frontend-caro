@@ -12,6 +12,8 @@ interface Product {
   title: string;
   description: string;
   image_url: string[];
+  category: string;
+  available: boolean;
   price_range?: string;
 }
 
@@ -26,6 +28,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const [quantity, setQuantity] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
+  const [showImageModal, setShowImageModal] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const handleAddToCart = () => {
@@ -53,6 +56,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     setShowDetailModal(true);
   };
 
+  const handleImageClick = () => {
+    setShowImageModal(true);
+  };
+
   const handleImageChange = (direction: 'next' | 'prev') => {
     if (direction === 'next') {
       setCurrentImageIndex((prev) => 
@@ -65,31 +72,37 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     }
   };
 
-  const isDescriptionLong = product.description.length > 100;
+  const isDescriptionLong = product.description.length > 60;
 
   return (
     <>
-      <div className={`border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow ${
+      <div className={`border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow h-full flex flex-col ${
         isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
       }`}>
-        <div className="h-48 bg-gray-100 overflow-hidden relative">
+        <div className="h-48 bg-gray-100 overflow-hidden relative cursor-pointer" onClick={handleImageClick}>
           {product.image_url?.length > 0 && (
             <>
               <img 
                 src={product.image_url[currentImageIndex]} 
                 alt={product.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-200"
               />
               {product.image_url.length > 1 && (
                 <div className="absolute inset-0 flex items-center justify-between p-2">
                   <button
-                    onClick={() => handleImageChange('prev')}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleImageChange('prev');
+                    }}
                     className="bg-black bg-opacity-50 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-opacity-70 transition-all"
                   >
                     ‹
                   </button>
                   <button
-                    onClick={() => handleImageChange('next')}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleImageChange('next');
+                    }}
                     className="bg-black bg-opacity-50 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-opacity-70 transition-all"
                   >
                     ›
@@ -111,28 +124,32 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </>
           )}
         </div>
-        <div className="p-4">
+        <div className="p-4 flex flex-col flex-grow">
           <h3 className={`text-lg font-semibold mb-2 ${
             isDarkMode ? 'text-white' : 'text-gray-800'
           }`}>
             {product.title}
           </h3>
-          <div className="mb-4">
+          <div className="mb-4 flex-grow">
             <p className={`text-sm ${
               isDarkMode ? 'text-gray-300' : 'text-gray-600'
-            } line-clamp-2`}>
-              {product.description}
+            } line-clamp-3`}>
+              {product.description.length > 60 
+                ? (
+                  <>
+                    {product.description.substring(0, 60)}
+                    <button
+                      onClick={handleReadMore}
+                      className="text-sm text-blue-600 hover:text-blue-800 font-medium ml-1"
+                    >
+                      More
+                    </button>
+                  </>
+                )
+                : product.description}
             </p>
-            {isDescriptionLong && (
-              <button
-                onClick={handleReadMore}
-                className="text-sm text-blue-600 hover:text-blue-800 mt-1 font-medium"
-              >
-                Read More
-              </button>
-            )}
           </div>
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center mt-auto">
             <span className="font-medium text-amber-600">
               {product.price_range || 'Request Quote'}
             </span>
@@ -173,6 +190,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         isOpen={showDetailModal} 
         onClose={() => setShowDetailModal(false)}
         title={product.title}
+        size="xl"
       >
         <div className="space-y-4">
           {product.image_url.length > 1 && (
@@ -213,11 +231,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           }`}>
             {product.description}
           </p>
-          <div className="flex justify-between items-center pt-4">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center pt-4 gap-3">
             <span className="font-medium text-amber-600">
               {product.price_range || 'Request Quote'}
             </span>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 justify-center sm:justify-end">
               <input
                 type="number"
                 min="1"
@@ -238,6 +256,75 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 Add to Quote
               </Button>
             </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Image Modal */}
+      <Modal 
+        isOpen={showImageModal} 
+        onClose={() => setShowImageModal(false)}
+        title="Product Images"
+        size="xl"
+      >
+        <div className="space-y-4">
+          <div className="relative h-96 bg-gray-100 rounded-lg overflow-hidden">
+            {product.image_url?.length > 0 && (
+              <>
+                <img 
+                  src={product.image_url[currentImageIndex]} 
+                  alt={product.title}
+                  className="w-full h-full object-contain"
+                />
+                {product.image_url.length > 1 && (
+                  <div className="absolute inset-0 flex items-center justify-between p-4">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleImageChange('prev');
+                      }}
+                      className="bg-black bg-opacity-50 text-white rounded-full w-12 h-12 flex items-center justify-center hover:bg-opacity-70 transition-all"
+                    >
+                      ‹
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleImageChange('next');
+                      }}
+                      className="bg-black bg-opacity-50 text-white rounded-full w-12 h-12 flex items-center justify-center hover:bg-opacity-70 transition-all"
+                    >
+                      ›
+                    </button>
+                  </div>
+                )}
+                {product.image_url.length > 1 && (
+                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                    {product.image_url.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentImageIndex(index)}
+                        className={`w-3 h-3 rounded-full ${
+                          index === currentImageIndex ? 'bg-white' : 'bg-white bg-opacity-50'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+          <div className="text-center">
+            <h3 className={`text-lg font-semibold ${
+              isDarkMode ? 'text-white' : 'text-gray-800'
+            }`}>
+              {product.title}
+            </h3>
+            <p className={`text-sm mt-1 ${
+              isDarkMode ? 'text-gray-300' : 'text-gray-600'
+            }`}>
+              Image {currentImageIndex + 1} of {product.image_url?.length || 0}
+            </p>
           </div>
         </div>
       </Modal>

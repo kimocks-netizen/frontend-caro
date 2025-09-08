@@ -8,7 +8,7 @@ interface ModalProps {
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   footer?: React.ReactNode;
 }
 
@@ -26,12 +26,13 @@ const Modal: React.FC<ModalProps> = ({
 
   const sizeClasses = {
     sm: 'max-w-md',
-    md: 'max-w-xl',
+    md: 'max-w-xl', 
     lg: 'max-w-3xl',
+    xl: 'max-w-6xl w-[90vw]',
   };
 
   return (
-    <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 ${isDarkMode ? 'bg-black/70' : 'bg-black/50'}`}>
+    <div className={`fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 ${isDarkMode ? 'bg-black/70' : 'bg-black/50'}`}>
       <div 
         className={`w-full ${sizeClasses[size]} rounded-lg shadow-xl overflow-hidden animate-fade-in`}
         onClick={(e) => e.stopPropagation()}
@@ -61,7 +62,7 @@ const Modal: React.FC<ModalProps> = ({
           )}
 
           {/* Content */}
-          <div className={`p-6 ${isDarkMode ? 'text-gray-100' : 'text-gray-800'}`}>
+          <div className={`p-4 sm:p-6 ${isDarkMode ? 'text-gray-100' : 'text-gray-800'}`}>
             {children}
           </div>
 
