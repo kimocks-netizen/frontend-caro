@@ -134,7 +134,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             <p className={`text-sm ${
               isDarkMode ? 'text-gray-300' : 'text-gray-600'
             } line-clamp-3`}>
-              {product.description.length > 60 
+              {isDescriptionLong 
                 ? (
                   <>
                     {product.description.substring(0, 60)}
@@ -142,7 +142,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                       onClick={handleReadMore}
                       className="text-sm text-blue-600 hover:text-blue-800 font-medium ml-1"
                     >
-                      More
+                      ...More
                     </button>
                   </>
                 )
