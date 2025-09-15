@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { api } from '../../services/api';
 import { useTheme } from '../../context/ThemeContext';
 import Button from '../ui/Button';
@@ -9,6 +9,7 @@ import type { Quote } from '../../types/quote';
 const QuoteStatus: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { trackingCode: urlTrackingCode } = useParams<{ trackingCode: string }>();
   const { isDarkMode } = useTheme();
   const [trackingCode, setTrackingCode] = useState('');
   const [quote, setQuote] = useState<Quote | null>(null);
@@ -17,11 +18,13 @@ const QuoteStatus: React.FC = () => {
   const [showPDF, setShowPDF] = useState(false);
 
   useEffect(() => {
-    if (location.state?.trackingCode) {
-      setTrackingCode(location.state.trackingCode);
-      fetchQuote(location.state.trackingCode);
+    // Priority: URL parameter > location state > manual input
+    const codeToUse = urlTrackingCode || location.state?.trackingCode;
+    if (codeToUse) {
+      setTrackingCode(codeToUse);
+      fetchQuote(codeToUse);
     }
-  }, [location]);
+  }, [urlTrackingCode, location.state?.trackingCode]);
 
   const fetchQuote = async (code: string) => {
     setLoading(true);
@@ -92,7 +95,7 @@ const QuoteStatus: React.FC = () => {
           Track Your Quote
         </h2>
         
-        {!quote && (
+        {!quote && !urlTrackingCode && (
           <form onSubmit={handleSubmit} className="mb-4 sm:mb-6">
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
               <input
@@ -117,6 +120,17 @@ const QuoteStatus: React.FC = () => {
               </Button>
             </div>
           </form>
+        )}
+
+        {urlTrackingCode && !quote && !loading && (
+          <div className="mb-4 sm:mb-6 p-3 rounded-md bg-blue-50 border border-blue-200">
+            <p className="text-blue-800 text-sm">
+              <strong>Tracking Code:</strong> {urlTrackingCode}
+            </p>
+            <p className="text-blue-600 text-xs mt-1">
+              Loading quote details...
+            </p>
+          </div>
         )}
 
         {loading && (

@@ -36,7 +36,7 @@ const AppRoutes: React.FC = () => {
         <Route path="quote">
           <Route index element={<Navigate to="request" replace />} />
           <Route path="request" element={<QuoteRequest />} />
-          <Route path="track" element={<QuoteTrack />} />
+          <Route path="track/:trackingCode" element={<QuoteTrack />} />
           <Route path="success" element={<QuoteSuccess />} />
         </Route>
         <Route path="admin">
