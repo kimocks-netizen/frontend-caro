@@ -49,4 +49,6 @@ export interface QuoteRequestData {
 export interface QuoteResponse {
   trackingCode: string;
   quoteNumber?: string;
+  requiresVerification?: boolean;
+  verified?: boolean;
 }

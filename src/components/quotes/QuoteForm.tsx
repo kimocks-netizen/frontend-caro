@@ -22,6 +22,9 @@ const QuoteForm: React.FC = () => {
     name?: string;
     email?: string;
   }>({});
+  const [verificationStep, setVerificationStep] = useState(false);
+  const [verificationCode, setVerificationCode] = useState('');
+  const [pendingEmail, setPendingEmail] = useState('');
 
   // Validation functions
   const validateName = (name: string): string | undefined => {
@@ -96,16 +99,54 @@ const QuoteForm: React.FC = () => {
       const response = await api.quotes.submit(quoteData);
       
       if (response.success && response.data?.trackingCode) {
-        clearCart();
-        navigate('/quote/success', { 
-          state: { trackingCode: response.data.trackingCode } 
-        });
+        if (response.data.requiresVerification) {
+          // Show verification step
+          setVerificationStep(true);
+          setPendingEmail(formData.email);
+          setError('');
+        } else {
+          // Direct success (shouldn't happen with new flow)
+          clearCart();
+          navigate('/quote/success', { 
+            state: { trackingCode: response.data.trackingCode } 
+          });
+        }
       } else {
         setError(response.message || 'Failed to submit quote');
       }
     } catch (error) {
       console.error('Quote submission error:', error);
       setError(error instanceof Error ? error.message : 'An error occurred while submitting your quote');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerification = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!verificationCode.trim()) {
+      setError('Please enter the verification code');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await api.quotes.verify(pendingEmail, verificationCode);
+      
+      if (response.success && response.data?.trackingCode) {
+        clearCart();
+        navigate('/quote/success', { 
+          state: { trackingCode: response.data.trackingCode } 
+        });
+      } else {
+        setError(response.message || 'Invalid verification code');
+      }
+    } catch (error) {
+      console.error('Verification error:', error);
+      setError(error instanceof Error ? error.message : 'An error occurred during verification');
     } finally {
       setLoading(false);
     }
@@ -120,6 +161,59 @@ const QuoteForm: React.FC = () => {
       setValidationErrors(prev => ({ ...prev, [name]: undefined }));
     }
   };
+
+  if (verificationStep) {
+    return (
+      <div className="space-y-4">
+        <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-700 border border-gray-600' : 'bg-blue-50 border border-blue-200'}`}>
+          <h3 className={`text-lg font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-blue-900'}`}>
+            Email Verification Required
+          </h3>
+          <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-blue-700'}`}>
+            We've sent a verification code to <strong>{pendingEmail}</strong>. 
+            Please check your email and enter the code below to complete your quote request.
+          </p>
+        </div>
+        
+        <form onSubmit={handleVerification} className="space-y-4">
+          <Input
+            label="Verification Code"
+            name="verificationCode"
+            value={verificationCode}
+            onChange={(e) => setVerificationCode(e.target.value)}
+            required
+            placeholder="Enter 6-digit code"
+            maxLength={6}
+          />
+          
+          {error && <p className="text-red-500">{error}</p>}
+          
+          <Button 
+            type="submit" 
+            variant="primary"
+            disabled={loading || !verificationCode.trim()}
+            className="w-full"
+          >
+            {loading ? 'Verifying...' : 'Verify Email & Complete Quote'}
+          </Button>
+          
+          <Button 
+            type="button" 
+            variant="secondary"
+            onClick={() => {
+              setVerificationStep(false);
+              setVerificationCode('');
+              setPendingEmail('');
+              setError('');
+            }}
+            className="w-full"
+          >
+            Back to Form
+          </Button>
+        </form>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">

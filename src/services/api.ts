@@ -1,8 +1,8 @@
 import type { Quote, QuoteRequestData, QuoteResponse } from "../types/quote";
-const API_BASE_URL = 'https://caro-backend.fly.dev/api';
+//const API_BASE_URL = 'https://caro-backend.fly.dev/api';
 
 //const API_BASE_URL = 'https://caro-backend-production.up.railway.app/api'; 
-//const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'http://localhost:3000/api';
 //const API_BASE_URL = 'https://backend-caro.kimocks12.workers.dev/api';
 // const API_BASE_URL = 'https://caro-backend-h1rh.onrender.com/api';
 //const API_BASE_URL = 'https://caro-backend-production.up.railway.app/api'; 
@@ -200,6 +200,9 @@ products: {
   quotes: {
     submit: (quoteData: QuoteRequestData) => {
       return api.post<QuoteResponse>('/quotes', quoteData);
+    },
+    verify: (email: string, code: string) => {
+      return api.post<QuoteResponse>('/quotes/verify', { email, code });
     },
     getByTracking: (trackingCode: string) => {
       return api.get<Quote>(`/quotes/${trackingCode}`);
